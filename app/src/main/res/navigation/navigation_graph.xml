@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/typeOfNewsFragment">
+    <fragment
+        android:id="@+id/typeOfNewsFragment"
+        android:name="com.example.newsfeed.NewsApp.fragments.TypeOfNewsFragment"
+        android:label="TypeOfNewsFragment">
+        <action
+            android:id="@+id/action_typeOfNewsFragment_to_detailsOfNewsFragment"
+            app:destination="@id/detailsOfNewsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookMarksFragment"
+        android:name="com.example.newsfeed.NewsApp.fragments.BookMarksFragment"
+        android:label="BookMarksFragment">
+        <action
+            android:id="@+id/action_bookMarksFragment_to_articleFragment"
+            app:destination="@id/articleFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchNewsFragment"
+        android:name="com.example.newsfeed.NewsApp.fragments.SearchNewsFragment"
+        android:label="SearchNewsFragment">
+        <action
+            android:id="@+id/action_searchNewsFragment_to_articleFragment"
+            app:destination="@id/articleFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsOfNewsFragment"
+        android:name="com.example.newsfeed.NewsApp.fragments.DetailsOfNewsFragment"
+        android:label="DetailsOfNewsFragment">
+        <action
+            android:id="@+id/action_detailsOfNewsFragment_to_articleFragment"
+            app:destination="@id/articleFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <argument
+            android:name="message"
+            app:argType="string"
+            android:defaultValue="default" />
+    </fragment>
+    <fragment
+        android:id="@+id/articleFragment"
+        android:name="com.example.newsfeed.NewsApp.fragments.ArticleFragment"
+        android:label="ArticleFragment" />
+</navigation>
