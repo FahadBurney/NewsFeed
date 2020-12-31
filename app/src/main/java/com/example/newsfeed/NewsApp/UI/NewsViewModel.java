@@ -29,30 +29,43 @@ public class NewsViewModel extends ViewModel {
         this.newsRepository = newsRepository;
     }
 
-    private MutableLiveData<List<ArticlesItem>> articlesLiveData;
-    private static final String TAG = "NewsViewModel.Articles";
-    public static final String TAG1 = "Articles";
+    public NewsViewModel() {
+        // zero-args constructor
+    }
 
+    private MutableLiveData<List<ArticlesItem>> newsArticlesLiveData;
+    private MutableLiveData<List<ArticlesItem>> searchNewsLiveData;
+
+    private static final String TAG = "NewsViewModel.Articles";
+private String Message;
 
     public LiveData<List<ArticlesItem>> getBreakingNews(String message) {
-        if (articlesLiveData == null) {
-            articlesLiveData = new MutableLiveData<>();
+
+        if (newsArticlesLiveData == null) {
+            newsArticlesLiveData = new MutableLiveData<>();
+            this.Message=message;
+            Log.i("LiveData","getBreakingNews "+message);
             initNews(message);
         }
-        return articlesLiveData;
+        else if(!message.equals(Message))
+        {
+            newsArticlesLiveData = new MutableLiveData<>();
+           this.Message=message;
+            initNews(message);
+        }
+        return newsArticlesLiveData;
     }
 
     private void initNews(String message) {
-        NewsApi newsApi=RetrofitInstance.newsApi;
-        Call<NewsResponse> call = newsApi.getBreakingNews(message, Constants.API_KEY);
+        NewsApi newsApi = RetrofitInstance.newsApi;
+     //   Log.i("ArticleViewModel",message+" ");
+        Call<NewsResponse> call = newsApi.getBreakingNews("in",message, Constants.API_KEY);
         call.enqueue(new Callback<NewsResponse>() {
             @Override
             public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
-                Log.e(TAG, "onResponse  : " + response.body().getTotalResults());
                 if (response.isSuccessful() && response.body().getArticles() != null) {
-                    List<ArticlesItem> articlesItems=response.body().getArticles();
-                    articlesLiveData.setValue(articlesItems);
-                    Log.e(TAG1, "articles : " + articlesLiveData.getValue().toString());
+                    List<ArticlesItem> articlesItems = response.body().getArticles();
+                    newsArticlesLiveData.postValue(articlesItems);
                 } else {
                     Log.i(TAG, "onResponse but articles not successful");
                 }

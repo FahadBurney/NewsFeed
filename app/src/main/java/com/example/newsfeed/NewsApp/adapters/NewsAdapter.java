@@ -29,7 +29,7 @@ public class NewsAdapter extends ListAdapter<ArticlesItem,NewsAdapter.ArticleVie
         super(diffCallback);
         this.articleClickInterface=articleClickInterface;
     }
-
+    private static final String TAG = "NewsViewModel.Articles";
 
 
     @NonNull

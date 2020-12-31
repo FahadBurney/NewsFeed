@@ -3,6 +3,7 @@ package com.example.newsfeed.NewsApp.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,6 @@ public class TypeOfNewsFragment extends Fragment implements View.OnClickListener
     return inflater.inflate(R.layout.fragment_type_of_news, container, false);
     }
    private NavController navController;
-    private NewsViewModel newsViewModel;
     private Button ScienceButton;
     private Button HealthButton;
     private Button EntertainmentButton;
@@ -43,7 +43,7 @@ public class TypeOfNewsFragment extends Fragment implements View.OnClickListener
         super.onViewCreated(view, savedInstanceState);
          navController= Navigation.findNavController(view);
 
-        newsViewModel = ((NewsActivity) getActivity()).ViewModel;
+     //   newsViewModel = ((NewsActivity) getActivity()).ViewModel;
         ScienceButton = getActivity().findViewById(R.id.scienceButton);
         HealthButton = getActivity().findViewById(R.id.healthButton);
         EntertainmentButton = getActivity().findViewById(R.id.entertainmentButton);
@@ -68,9 +68,8 @@ public class TypeOfNewsFragment extends Fragment implements View.OnClickListener
                  action=TypeOfNewsFragmentDirections.
                         actionTypeOfNewsFragmentToDetailsOfNewsFragment();
                 action.setMessage("health");
-
                 navController.navigate(action);
-
+                Log.i("TypesOfNewsFragment","health button is clicked");
                 break;
             case R.id.sportsButton:
 
@@ -79,6 +78,7 @@ public class TypeOfNewsFragment extends Fragment implements View.OnClickListener
                 action.setMessage("sports");
 
                 navController.navigate(action);
+                Log.i("TypesOfNewsFragment","sports button is clicked");
 
                 break;
             case R.id.entertainmentButton:
@@ -87,6 +87,8 @@ public class TypeOfNewsFragment extends Fragment implements View.OnClickListener
                         actionTypeOfNewsFragmentToDetailsOfNewsFragment();
                 action.setMessage("entertainment");
                 navController.navigate(action);
+                Log.i("TypesOfNewsFragment","entertainment button is clicked");
+
                 break;
             case R.id.technologyButton:
 
@@ -94,18 +96,26 @@ public class TypeOfNewsFragment extends Fragment implements View.OnClickListener
                         actionTypeOfNewsFragmentToDetailsOfNewsFragment();
                 action.setMessage("technology");
                 navController.navigate(action);
+
+                Log.i("TypesOfNewsFragment","technology button is clicked");
+
                 break;
             case R.id.businessButton:
                 action=TypeOfNewsFragmentDirections.
                     actionTypeOfNewsFragmentToDetailsOfNewsFragment();
                 action.setMessage("business");
                 navController.navigate(action);
+                Log.i("TypesOfNewsFragment","business button is clicked");
+
                 break;
             case R.id.scienceButton:
                 action=TypeOfNewsFragmentDirections.
                         actionTypeOfNewsFragmentToDetailsOfNewsFragment();
                 action.setMessage("science");
-                navController.navigate(action);                break;
+                navController.navigate(action);
+                Log.i("TypesOfNewsFragment","health button is clicked");
+
+                break;
             case R.id.generalButton:
 
                 action=TypeOfNewsFragmentDirections.
