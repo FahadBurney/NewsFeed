@@ -14,9 +14,12 @@ import java.util.List;
 @Dao
 public interface ArticlesDao
 {
+    //onConflict Strategy Basically tells whether that item was present before or not
+    // it returns long which is ID that is basically inserted
 @Insert(onConflict= OnConflictStrategy.REPLACE)
     Long upsert(ArticlesItem articles);
 
+//it wil return livedata object
 @Query("Select * from articles")
     LiveData<List<ArticlesItem>> getAllArticles();
 @Delete

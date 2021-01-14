@@ -24,7 +24,6 @@ public class NewsAdapter extends ListAdapter<ArticlesItem,NewsAdapter.ArticleVie
 {
    // private OnItemClickListener onItemClickListener;
     ArticleClickInterface articleClickInterface;
-
     public NewsAdapter(@NonNull DiffUtil.ItemCallback<ArticlesItem> diffCallback, ArticleClickInterface articleClickInterface) {
         super(diffCallback);
         this.articleClickInterface=articleClickInterface;
@@ -58,18 +57,8 @@ holder.bind(articles);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvPublishedAt = itemView.findViewById(R.id.tvPublishedAt);
             BookMarksButton = itemView.findViewById(R.id.ivBookMarksButton);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    articleClickInterface.openArticle(getAdapterPosition());
-                }
-            });
-            BookMarksButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    articleClickInterface.saveArticle(getAdapterPosition());
-                }
-            });
+            itemView.setOnClickListener(v -> articleClickInterface.openArticle(getAdapterPosition()));
+            BookMarksButton.setOnClickListener(v -> articleClickInterface.saveArticle(getAdapterPosition()));
         }
         public void bind(ArticlesItem articles)
         {

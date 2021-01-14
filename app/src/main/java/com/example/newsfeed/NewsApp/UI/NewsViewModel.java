@@ -22,7 +22,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class NewsViewModel extends ViewModel {
+public class
+NewsViewModel extends ViewModel {
     public NewsRepository newsRepository;
 
     public NewsViewModel(NewsRepository newsRepository) {
@@ -37,29 +38,11 @@ public class NewsViewModel extends ViewModel {
     private MutableLiveData<List<ArticlesItem>> searchNewsLiveData;
 
     private static final String TAG = "NewsViewModel.Articles";
-private String Message;
-
-    public LiveData<List<ArticlesItem>> getBreakingNews(String message) {
-
-        if (newsArticlesLiveData == null) {
-            newsArticlesLiveData = new MutableLiveData<>();
-            this.Message=message;
-            Log.i("LiveData","getBreakingNews "+message);
-            initNews(message);
-        }
-        else if(!message.equals(Message))
-        {
-            newsArticlesLiveData = new MutableLiveData<>();
-           this.Message=message;
-            initNews(message);
-        }
-        return newsArticlesLiveData;
-    }
+    private String Message;
 
     private void initNews(String message) {
         NewsApi newsApi = RetrofitInstance.newsApi;
-     //   Log.i("ArticleViewModel",message+" ");
-        Call<NewsResponse> call = newsApi.getBreakingNews("in",message, Constants.API_KEY);
+        Call<NewsResponse> call = newsApi.getBreakingNews("in", message, Constants.API_KEY);
         call.enqueue(new Callback<NewsResponse>() {
             @Override
             public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
@@ -70,13 +53,30 @@ private String Message;
                     Log.i(TAG, "onResponse but articles not successful");
                 }
             }
-
             @Override
             public void onFailure(Call<NewsResponse> call, Throwable t) {
                 Log.e(TAG, "onFailure : " + t.getLocalizedMessage());
             }
         });
     }
+// livedata method
+    public LiveData<List<ArticlesItem>> getBreakingNews(String message) {
+
+        if (newsArticlesLiveData == null) {
+            newsArticlesLiveData = new MutableLiveData<>();
+            this.Message = message;
+            Log.i("LiveData", "getBreakingNews " + message);
+            // in the below function we pass the articles inside our liveData that we have
+            // fetched from NewsApi
+            initNews(message);
+        } else if (!message.equals(Message)) {
+            newsArticlesLiveData = new MutableLiveData<>();
+            this.Message = message;
+            initNews(message);
+        }
+        return newsArticlesLiveData;
+    }
+  //  public LiveData<>
 
 
 }

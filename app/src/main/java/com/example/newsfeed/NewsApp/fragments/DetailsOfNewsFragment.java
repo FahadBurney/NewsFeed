@@ -39,28 +39,23 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DetailsOfNewsFragment extends Fragment implements NewsAdapter.ArticleClickInterface {
-    public DetailsOfNewsFragment() {
-
+    public DetailsOfNewsFragment()
+    {
     }
-
     String message;
     private RecyclerView recyclerView;
     private NewsAdapter newsAdapter;
-public static final String TAG="DetailsOfNewsFragment";
+    public static final String TAG = "DetailsOfNewsFragment";
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
-
-
-//fragmentTransaction.remove(y).commit()
+    //fragmentTransaction.remove(y).commit()
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_details, container, false);
-    Log.i(TAG,"onCreateView() is created in DetailsOfNewsFragment");
         recyclerView = view.findViewById(R.id.RecyclerView);
         recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -70,13 +65,17 @@ public static final String TAG="DetailsOfNewsFragment";
             DetailsOfNewsFragmentArgs args = DetailsOfNewsFragmentArgs.fromBundle(getArguments());
             message = args.getMessage();
         }
-        Log.i("TAG",message);
+        Log.i("TAG", message);
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // created instance of viewModel here
+        // Basically we want to show updated items on the NewsAdapter List
+        // Therefore, we actually trigger the liveData method to update the list
+        //observe Method is used Basically to observe the List on UI or recyclerView Here
         NewsViewModel articleViewModel = new ViewModelProvider(requireActivity()).get(NewsViewModel.class);
         articleViewModel.getBreakingNews(message).observe(requireActivity(), new Observer<List<ArticlesItem>>() {
             @Override
@@ -84,14 +83,13 @@ public static final String TAG="DetailsOfNewsFragment";
                 newsAdapter.submitList(articlesItems);
             }
         });
-      //  Log.i(TAG,"onViewCreated() is created in DetailsOfNewsFragment");
-        Log.i("TAG",message+" onViewCreated()");
+        //  Log.i(TAG,"onViewCreated() is created in DetailsOfNewsFragment");
+        Log.i("TAG", message + " onViewCreated()");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-
     }
 
     @Override

@@ -29,13 +29,6 @@ public class TypeOfNewsFragment extends Fragment implements View.OnClickListener
     return inflater.inflate(R.layout.fragment_type_of_news, container, false);
     }
    private NavController navController;
-    private Button ScienceButton;
-    private Button HealthButton;
-    private Button EntertainmentButton;
-    private Button SportsButton;
-    private Button TechnologyButton;
-    private Button BusinessButton;
-    private Button GeneralButton;
 
 
     @Override
@@ -44,20 +37,20 @@ public class TypeOfNewsFragment extends Fragment implements View.OnClickListener
          navController= Navigation.findNavController(view);
 
      //   newsViewModel = ((NewsActivity) getActivity()).ViewModel;
-        ScienceButton = getActivity().findViewById(R.id.scienceButton);
-        HealthButton = getActivity().findViewById(R.id.healthButton);
-        EntertainmentButton = getActivity().findViewById(R.id.entertainmentButton);
-        SportsButton = getActivity().findViewById(R.id.sportsButton);
-        TechnologyButton = getActivity().findViewById(R.id.technologyButton);
-        BusinessButton = getActivity().findViewById(R.id.businessButton);
-        GeneralButton = getActivity().findViewById(R.id.generalButton);
-        GeneralButton.setOnClickListener(this);
-        ScienceButton.setOnClickListener(this);
-        HealthButton.setOnClickListener(this);
-        SportsButton.setOnClickListener(this);
-        TechnologyButton.setOnClickListener(this);
-        BusinessButton.setOnClickListener(this);
-        EntertainmentButton.setOnClickListener(this);
+        Button scienceButton = getActivity().findViewById(R.id.scienceButton);
+        Button healthButton = getActivity().findViewById(R.id.healthButton);
+        Button entertainmentButton = getActivity().findViewById(R.id.entertainmentButton);
+        Button sportsButton = getActivity().findViewById(R.id.sportsButton);
+        Button technologyButton = getActivity().findViewById(R.id.technologyButton);
+        Button businessButton = getActivity().findViewById(R.id.businessButton);
+        Button generalButton = getActivity().findViewById(R.id.generalButton);
+        generalButton.setOnClickListener(this);
+        scienceButton.setOnClickListener(this);
+        healthButton.setOnClickListener(this);
+        sportsButton.setOnClickListener(this);
+        technologyButton.setOnClickListener(this);
+        businessButton.setOnClickListener(this);
+        entertainmentButton.setOnClickListener(this);
     }
 
     @Override
