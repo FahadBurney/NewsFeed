@@ -24,11 +24,12 @@ public class NewsAdapter extends ListAdapter<ArticlesItem,NewsAdapter.ArticleVie
 {
    // private OnItemClickListener onItemClickListener;
     ArticleClickInterface articleClickInterface;
+
     public NewsAdapter(@NonNull DiffUtil.ItemCallback<ArticlesItem> diffCallback, ArticleClickInterface articleClickInterface) {
         super(diffCallback);
         this.articleClickInterface=articleClickInterface;
     }
-    private static final String TAG = "NewsViewModel.Articles";
+
 
 
     @NonNull

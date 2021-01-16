@@ -1,6 +1,8 @@
 package com.example.newsfeed.NewsApp.UI;
 
+import android.app.ProgressDialog;
 import android.util.Log;
+import android.widget.ProgressBar;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -38,8 +40,9 @@ NewsViewModel extends ViewModel {
     private MutableLiveData<List<ArticlesItem>> searchNewsLiveData;
 
     private static final String TAG = "NewsViewModel.Articles";
+    public static final String TAG1 = "Articles";
     private String Message;
-
+private String searchingText;
     private void initNews(String message) {
         NewsApi newsApi = RetrofitInstance.newsApi;
         Call<NewsResponse> call = newsApi.getBreakingNews("in", message, Constants.API_KEY);
@@ -59,7 +62,7 @@ NewsViewModel extends ViewModel {
             }
         });
     }
-// livedata method
+    // liveData method
     public LiveData<List<ArticlesItem>> getBreakingNews(String message) {
 
         if (newsArticlesLiveData == null) {
@@ -76,7 +79,46 @@ NewsViewModel extends ViewModel {
         }
         return newsArticlesLiveData;
     }
-  //  public LiveData<>
+    public LiveData<List<ArticlesItem>> SearchNews(String searchQuery, ProgressDialog progressDialog) {
+        if (searchNewsLiveData == null) {
+            searchNewsLiveData = new MutableLiveData<>();
+            searchingText=searchQuery;
+            searchNewsFromApi(searchQuery,progressDialog);
+        }
+        else if(!searchQuery.equalsIgnoreCase(searchingText))
+        {
+            searchNewsLiveData=new MutableLiveData<>();
+            searchingText=searchQuery;
+            searchNewsFromApi(searchQuery,progressDialog);
+        }else {
+            progressDialog.dismiss();
+        }return searchNewsLiveData;
+    }
+    private void searchNewsFromApi(String  searchQuery, ProgressDialog progressDialog) {
+        NewsApi newsApi=RetrofitInstance.newsApi;
+        int searchNewsPage = 1;
+        Call<NewsResponse> call = newsApi.SearchNews(searchQuery, searchNewsPage,Constants.API_KEY);
+        call.enqueue(new Callback<NewsResponse>() {
+            @Override
+            public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
+                Log.e(TAG, "onResponse  : " + response.body().getTotalResults());
+                if (response.isSuccessful() && response.body().getArticles() != null) {
+                    List<ArticlesItem> articlesItems=response.body().getArticles();
+                    searchNewsLiveData.setValue(articlesItems);
+                    Log.e(TAG1, "articles from searchNews : " + searchNewsLiveData.getValue().toString());
+                } else {
+                    Log.i(TAG, "onResponse in SearchNews but articles not successful");
+                }
+                progressDialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(Call<NewsResponse> call, Throwable t) {
+                Log.e(TAG, "onFailure : " + t.getLocalizedMessage());
+                progressDialog.setCancelable(true);
+            }
+        });
+    }
 
 
 }

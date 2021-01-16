@@ -14,7 +14,7 @@ public abstract class ArticlesDatabase extends RoomDatabase
 {
    private static ArticlesDatabase instance;
 
-   // this method actually we use to access database operation methods
+   // this method actually we use to access database operationmethods
     //that are put in articlesDao interface and we do it in repository class
    public abstract ArticlesDao getArticlesDao();
 

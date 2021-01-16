@@ -27,11 +27,7 @@ public class RetrofitInstance {
     public static final String TAG1 = "Articles";
 
     // only logging responses
-    //we actually log responses from retrofit,we wil attach this to our Retrofit Object to be able to see which requests
-    // we are actually Making and what Response are
-    //we set level of logging interceptor to BODY to get actual response of the body
     private static HttpLoggingInterceptor logging = new HttpLoggingInterceptor().setLevel(Level.BODY);
-
 // we use this interceptor to create network clients
     private static OkHttpClient.Builder client= new OkHttpClient.Builder();
     {

@@ -17,12 +17,6 @@ public class NewsResponse{
 	@Expose
 	private String status;
 
-	public NewsResponse(List<ArticlesItem> articles, int totalResults, String status) {
-		this.articles = articles;
-		this.totalResults = totalResults;
-		this.status = status;
-	}
-
 	public int getTotalResults(){
 		return totalResults;
 	}

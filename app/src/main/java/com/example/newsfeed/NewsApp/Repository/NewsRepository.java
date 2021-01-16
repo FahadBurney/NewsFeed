@@ -12,5 +12,4 @@ public class NewsRepository {
         this.database = database;
     }
 
-
 }
