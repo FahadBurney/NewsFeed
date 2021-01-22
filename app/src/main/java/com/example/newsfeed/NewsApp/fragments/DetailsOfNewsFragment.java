@@ -2,6 +2,7 @@ package com.example.newsfeed.NewsApp.fragments;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,9 @@ import com.example.newsfeed.NewsApp.models.ArticlesItem;
 import com.example.newsfeed.NewsApp.models.NewsResponse;
 import com.example.newsfeed.NewsApp.util.Constants;
 import com.example.newsfeed.R;
+
+import org.parceler.Parcel;
+import org.parceler.Parcels;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -102,16 +106,19 @@ public class DetailsOfNewsFragment extends Fragment implements NewsAdapter.Artic
     public void openArticle(int position) {
 
         //here we get the article that we want to pass to Article Fragment
-        com.example.newsfeed.NewsApp.models.ArticlesItem articles = newsAdapter.getCurrentList().get(position);
+      ArticlesItem articles = newsAdapter.getCurrentList().get(position);
         Log.i("Article Details", articles.getUrl() + "\n " + articles.getContent() + "\n" + articles.getDescription() + "\n" + articles.getTitle() + "\n");
+      //  Parcelable parcelable= Parcels.wrap(articles);
+
         Bundle bundle = new Bundle();
-       // Bundle article=articles.
-        bundle.putSerializable("article",articles);
-        Log.i("Data",bundle.getBundle("article").toString());
-     // bundle.putP
+//bundle.putParcelable("article",parcelable);
+         // Bundle article=articles.
+           bundle.putSerializable("article", (Serializable)articles);
+        // Log.i("Data",bundle.getBundle("article").toString());
+        // bundle.putP
         //  bundle.putSerializable("article", articles);
-        navController.navigate(R.id.action_detailsOfNewsFragment_to_articleFragment, bundle);
-        //        navController.navigate(R.id.action_detailsOfNewsFragment_to_articleFragment,bundle);
+        // navController.navigate(R.id.action_detailsOfNewsFragment_to_articleFragment, bundle);
+                navController.navigate(R.id.action_detailsOfNewsFragment_to_articleFragment,bundle);
         //        DetailsOfNewsFragmentDirections.ActionDetailsOfNewsFragmentToArticleFragment action=//        DetailsOfNewsFragmentDirections.actionDetailsOfNewsFragmentToArticleFragment(articles);
         //        navController.navigate(action);
     }

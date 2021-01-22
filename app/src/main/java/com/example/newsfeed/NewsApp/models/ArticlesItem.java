@@ -1,6 +1,5 @@
 package com.example.newsfeed.NewsApp.models;
 
-import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
@@ -11,11 +10,14 @@ import androidx.room.PrimaryKey;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 import java.io.Serializable;
 import java.util.Objects;
 
+
 @Entity(tableName = "articles")
-public class ArticlesItem implements Serializable {
+public class ArticlesItem implements Serializable  {
 	@PrimaryKey(autoGenerate = true)
 	private int id;
 

@@ -47,7 +47,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
-// Retrofit and gson Library
+// Retrofit and GSON Library
     implementation 'com.squareup.retrofit2:retrofit:2.6.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
     //Logging in Retrofit
@@ -61,6 +61,10 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     //NumberProgressBar
     implementation 'com.daimajia.numberprogressbar:library:1.4@aar'
-// Safe-args Implementation
-    
+
+
+//getting Parceler
+    implementation 'org.parceler:parceler-api:1.1.12'
+    annotationProcessor 'org.parceler:parceler:1.1.12'
+
 }
