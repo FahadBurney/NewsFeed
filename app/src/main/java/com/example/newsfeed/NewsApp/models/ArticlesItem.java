@@ -1,5 +1,8 @@
 package com.example.newsfeed.NewsApp.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.room.Entity;
@@ -8,11 +11,11 @@ import androidx.room.PrimaryKey;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity(tableName = "articles")
-public class ArticlesItem
-{
+public class ArticlesItem implements Serializable {
 	@PrimaryKey(autoGenerate = true)
 	private int id;
 
@@ -39,6 +42,10 @@ public class ArticlesItem
 	@SerializedName("urlToImage")
 	@Expose
 	private String urlToImage;
+
+
+
+
 
 	@Override
 	public boolean equals(Object o) {
@@ -168,4 +175,6 @@ public class ArticlesItem
 			return oldItem.getContent().equals(newItem.getContent());
 		}
 	};
+
+
 }

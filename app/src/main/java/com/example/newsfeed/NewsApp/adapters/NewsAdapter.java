@@ -1,6 +1,7 @@
 package com.example.newsfeed.NewsApp.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,16 +23,19 @@ import java.util.List;
 
 public class NewsAdapter extends ListAdapter<ArticlesItem,NewsAdapter.ArticleViewHolder>
 {
-   // private OnItemClickListener onItemClickListener;
+  //  private ArticlesItem OnItemClickListener;
+    // private OnItemClickListener onItemClickListener;
     ArticleClickInterface articleClickInterface;
-
+public static final String TAG="POSITION";
     public NewsAdapter(@NonNull DiffUtil.ItemCallback<ArticlesItem> diffCallback, ArticleClickInterface articleClickInterface) {
         super(diffCallback);
         this.articleClickInterface=articleClickInterface;
     }
 
-
-
+/*public  void setOnItemClickListener(ArticlesItem articlesItem)
+{
+    OnItemClickListener=articlesItem;
+}*/
     @NonNull
     @Override
     public ArticleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -58,8 +62,16 @@ holder.bind(articles);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvPublishedAt = itemView.findViewById(R.id.tvPublishedAt);
             BookMarksButton = itemView.findViewById(R.id.ivBookMarksButton);
-            itemView.setOnClickListener(v -> articleClickInterface.openArticle(getAdapterPosition()));
-            BookMarksButton.setOnClickListener(v -> articleClickInterface.saveArticle(getAdapterPosition()));
+            itemView.setOnClickListener((View v) -> {
+                articleClickInterface.openArticle(getAdapterPosition());
+
+
+                Log.i(TAG, "getAdapterPosition() "+getAdapterPosition());
+            });
+            BookMarksButton.setOnClickListener(v -> {
+                articleClickInterface.saveArticle(getAdapterPosition());
+            });
+
         }
         public void bind(ArticlesItem articles)
         {
@@ -68,11 +80,13 @@ holder.bind(articles);
             tvPublishedAt.setText(articles.getPublishedAt());
             Glide.with(itemView.getContext()).load(articles.getUrlToImage()).
                     centerCrop().into(ArticleImage);
+
         }
     }
     public interface ArticleClickInterface
     {
-     public void openArticle(int position);
-     public void saveArticle(int position);
+
+     void openArticle(int position);
+     void saveArticle(int position);
     }
 }

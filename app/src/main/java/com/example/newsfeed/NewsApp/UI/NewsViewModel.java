@@ -79,7 +79,7 @@ private String searchingText;
         }
         return newsArticlesLiveData;
     }
-    public LiveData<List<ArticlesItem>> SearchNews(String searchQuery, ProgressDialog progressDialog) {
+    public LiveData<List<ArticlesItem>> SearchNews(String searchQuery,ProgressDialog progressDialog) {
         if (searchNewsLiveData == null) {
             searchNewsLiveData = new MutableLiveData<>();
             searchingText=searchQuery;
@@ -90,17 +90,21 @@ private String searchingText;
             searchNewsLiveData=new MutableLiveData<>();
             searchingText=searchQuery;
             searchNewsFromApi(searchQuery,progressDialog);
-        }else {
-            progressDialog.dismiss();
-        }return searchNewsLiveData;
+        }else {            progressDialog.dismiss();}
+             return searchNewsLiveData;
     }
-    private void searchNewsFromApi(String  searchQuery, ProgressDialog progressDialog) {
+    private void searchNewsFromApi(String  searchQuery,ProgressDialog progressDialog) {
         NewsApi newsApi=RetrofitInstance.newsApi;
         int searchNewsPage = 1;
         Call<NewsResponse> call = newsApi.SearchNews(searchQuery, searchNewsPage,Constants.API_KEY);
+        Log.i("ViewModel",searchQuery);
         call.enqueue(new Callback<NewsResponse>() {
             @Override
             public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
+                int code=response.code();
+                String message=response.message();
+Log.i("errorCode",code+" code"+" message "+message);
+
                 Log.e(TAG, "onResponse  : " + response.body().getTotalResults());
                 if (response.isSuccessful() && response.body().getArticles() != null) {
                     List<ArticlesItem> articlesItems=response.body().getArticles();
@@ -109,13 +113,13 @@ private String searchingText;
                 } else {
                     Log.i(TAG, "onResponse in SearchNews but articles not successful");
                 }
-                progressDialog.dismiss();
+             progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<NewsResponse> call, Throwable t) {
                 Log.e(TAG, "onFailure : " + t.getLocalizedMessage());
-                progressDialog.setCancelable(true);
+               progressDialog.setCancelable(true);
             }
         });
     }
