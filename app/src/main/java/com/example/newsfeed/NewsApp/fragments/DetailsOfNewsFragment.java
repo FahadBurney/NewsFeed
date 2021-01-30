@@ -18,6 +18,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -34,8 +35,6 @@ import com.example.newsfeed.NewsApp.models.NewsResponse;
 import com.example.newsfeed.NewsApp.util.Constants;
 import com.example.newsfeed.R;
 
-import org.parceler.Parcel;
-import org.parceler.Parcels;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -51,10 +50,9 @@ public class DetailsOfNewsFragment extends Fragment implements NewsAdapter.Artic
     }
 
     String message;
-    private RecyclerView recyclerView;
     private NewsAdapter newsAdapter;
     private NavController navController;
-
+private NewsViewModel newsViewModel;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,17 +68,20 @@ public class DetailsOfNewsFragment extends Fragment implements NewsAdapter.Artic
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_details, container, false);
-        recyclerView = view.findViewById(R.id.RecyclerView);
-        recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        newsAdapter = new NewsAdapter(ArticlesItem.DiffUtilCallBack, this);
-        recyclerView.setAdapter(newsAdapter);
+        setupRecyclerView(view);
         if (getArguments() != null) {
             DetailsOfNewsFragmentArgs args = DetailsOfNewsFragmentArgs.fromBundle(getArguments());
             message = args.getMessage();
         }
-
         return view;
+    }
+
+    private void setupRecyclerView(View view) {
+        RecyclerView recyclerView = view.findViewById(R.id.RecyclerView);
+        recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), DividerItemDecoration.VERTICAL));
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        newsAdapter = new NewsAdapter(ArticlesItem.DiffUtilCallBack, this);
+        recyclerView.setAdapter(newsAdapter);
     }
 
     @Override
@@ -92,12 +93,7 @@ public class DetailsOfNewsFragment extends Fragment implements NewsAdapter.Artic
         // Therefore, we actually trigger the liveData method to update the list
         //observe Method is used Basically to observe the List on UI or recyclerView Here
         NewsViewModel articleViewModel = new ViewModelProvider(requireActivity()).get(NewsViewModel.class);
-        articleViewModel.getBreakingNews(message).observe(getViewLifecycleOwner(), new Observer<List<ArticlesItem>>() {
-            @Override
-            public void onChanged(List<ArticlesItem> articlesItems) {
-                newsAdapter.submitList(articlesItems);
-            }
-        });
+        articleViewModel.getBreakingNews(message).observe(getViewLifecycleOwner(), articlesItems -> newsAdapter.submitList(articlesItems));
         //newsAdapter.setOnItemClickListener(new V);
         // D
     }
@@ -106,26 +102,18 @@ public class DetailsOfNewsFragment extends Fragment implements NewsAdapter.Artic
     public void openArticle(int position) {
 
         //here we get the article that we want to pass to Article Fragment
-      ArticlesItem articles = newsAdapter.getCurrentList().get(position);
-        Log.i("Article Details", articles.getUrl() + "\n " + articles.getContent() + "\n" + articles.getDescription() + "\n" + articles.getTitle() + "\n");
-      //  Parcelable parcelable= Parcels.wrap(articles);
+        ArticlesItem articles = newsAdapter.getCurrentList().get(position);
 
         Bundle bundle = new Bundle();
-//bundle.putParcelable("article",parcelable);
-         // Bundle article=articles.
-           bundle.putSerializable("article", (Serializable)articles);
-        // Log.i("Data",bundle.getBundle("article").toString());
-        // bundle.putP
-        //  bundle.putSerializable("article", articles);
-        // navController.navigate(R.id.action_detailsOfNewsFragment_to_articleFragment, bundle);
-                navController.navigate(R.id.action_detailsOfNewsFragment_to_articleFragment,bundle);
-        //        DetailsOfNewsFragmentDirections.ActionDetailsOfNewsFragmentToArticleFragment action=//        DetailsOfNewsFragmentDirections.actionDetailsOfNewsFragmentToArticleFragment(articles);
-        //        navController.navigate(action);
+        bundle.putSerializable("article", articles);
+        navController.navigate(R.id.action_detailsOfNewsFragment_to_articleFragment, bundle);
     }
 
-    @Override
-    public void saveArticle(int position) {
+/*
+
 
     }
+*/
+    
+    }
 
-}

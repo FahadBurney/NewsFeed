@@ -1,5 +1,6 @@
 package com.example.newsfeed.NewsApp.UI;
 
+import android.app.Application;
 import android.app.ProgressDialog;
 import android.util.Log;
 import android.widget.ProgressBar;
@@ -9,6 +10,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.newsfeed.NewsApp.Database.ArticlesDao;
+import com.example.newsfeed.NewsApp.Database.ArticlesDatabase;
 import com.example.newsfeed.NewsApp.NewsActivity;
 import com.example.newsfeed.NewsApp.Repository.NewsRepository;
 import com.example.newsfeed.NewsApp.api.NewsApi;
@@ -24,25 +27,28 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class
-NewsViewModel extends ViewModel {
-    public NewsRepository newsRepository;
+public class NewsViewModel extends AndroidViewModel {
+    private NewsRepository newsRepository;
+    private ArticlesDatabase articlesDb;
+    private ArticlesDao articlesDao;
 
-    public NewsViewModel(NewsRepository newsRepository) {
-        this.newsRepository = newsRepository;
+    //public NewsViewModel()
+//{
+//}
+    public NewsViewModel(Application application) {
+        super(application);
+        newsRepository = new NewsRepository(application);
+        articlesDb = ArticlesDatabase.getInstance(application);
+        articlesDao = articlesDb.getArticlesDao();
     }
-
-    public NewsViewModel() {
-        // zero-args constructor
-    }
-
     private MutableLiveData<List<ArticlesItem>> newsArticlesLiveData;
     private MutableLiveData<List<ArticlesItem>> searchNewsLiveData;
 
     private static final String TAG = "NewsViewModel.Articles";
     public static final String TAG1 = "Articles";
     private String Message;
-private String searchingText;
+    private String searchingText;
+
     private void initNews(String message) {
         NewsApi newsApi = RetrofitInstance.newsApi;
         Call<NewsResponse> call = newsApi.getBreakingNews("in", message, Constants.API_KEY);
@@ -62,13 +68,14 @@ private String searchingText;
             }
         });
     }
-    // liveData method
+
+    // liveData method to return back this method to Details Of News Fragment
     public LiveData<List<ArticlesItem>> getBreakingNews(String message) {
 
         if (newsArticlesLiveData == null) {
             newsArticlesLiveData = new MutableLiveData<>();
             this.Message = message;
-            Log.i("LiveData", "getBreakingNews " + message);
+ //           Log.i("LiveData", "getBreakingNews " + message);
             // in the below function we pass the articles inside our liveData that we have
             // fetched from NewsApi
             initNews(message);
@@ -79,49 +86,66 @@ private String searchingText;
         }
         return newsArticlesLiveData;
     }
-    public LiveData<List<ArticlesItem>> SearchNews(String searchQuery,ProgressDialog progressDialog) {
+
+    public LiveData<List<ArticlesItem>> SearchNews(String searchQuery, ProgressDialog progressDialog) {
         if (searchNewsLiveData == null) {
             searchNewsLiveData = new MutableLiveData<>();
-            searchingText=searchQuery;
-            searchNewsFromApi(searchQuery,progressDialog);
+            searchingText = searchQuery;
+            searchNewsFromApi(searchQuery, progressDialog);
+        } else if (!searchQuery.equalsIgnoreCase(searchingText)) {
+            searchNewsLiveData = new MutableLiveData<>();
+            searchingText = searchQuery;
+            searchNewsFromApi(searchQuery, progressDialog);
+        } else {
+            progressDialog.dismiss();
         }
-        else if(!searchQuery.equalsIgnoreCase(searchingText))
-        {
-            searchNewsLiveData=new MutableLiveData<>();
-            searchingText=searchQuery;
-            searchNewsFromApi(searchQuery,progressDialog);
-        }else {            progressDialog.dismiss();}
-             return searchNewsLiveData;
+        return searchNewsLiveData;
     }
-    private void searchNewsFromApi(String  searchQuery,ProgressDialog progressDialog) {
-        NewsApi newsApi=RetrofitInstance.newsApi;
+
+    private void searchNewsFromApi(String searchQuery, ProgressDialog progressDialog) {
+        NewsApi newsApi = RetrofitInstance.newsApi;
         int searchNewsPage = 1;
-        Call<NewsResponse> call = newsApi.SearchNews(searchQuery, searchNewsPage,Constants.API_KEY);
-        Log.i("ViewModel",searchQuery);
+        Call<NewsResponse> call = newsApi.SearchNews(searchQuery, searchNewsPage, Constants.API_KEY);
+     //   Log.i("ViewModel", searchQuery);
         call.enqueue(new Callback<NewsResponse>() {
             @Override
             public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
-                int code=response.code();
-                String message=response.message();
-Log.i("errorCode",code+" code"+" message "+message);
+                int code = response.code();
+                String message = response.message();
+                Log.i("errorCode", code + " code" + " message " + message);
 
                 Log.e(TAG, "onResponse  : " + response.body().getTotalResults());
                 if (response.isSuccessful() && response.body().getArticles() != null) {
-                    List<ArticlesItem> articlesItems=response.body().getArticles();
+                    List<ArticlesItem> articlesItems = response.body().getArticles();
                     searchNewsLiveData.setValue(articlesItems);
                     Log.e(TAG1, "articles from searchNews : " + searchNewsLiveData.getValue().toString());
                 } else {
                     Log.i(TAG, "onResponse in SearchNews but articles not successful");
                 }
-             progressDialog.dismiss();
+                progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<NewsResponse> call, Throwable t) {
                 Log.e(TAG, "onFailure : " + t.getLocalizedMessage());
-               progressDialog.setCancelable(true);
+                progressDialog.setCancelable(true);
             }
         });
+    }
+
+    // Functions for retrieving data from Database
+    public void saveArticle(ArticlesItem articlesItem) {
+        Log.i("Inside ViewMODEL",articlesItem.toString());
+
+         newsRepository.upsert(articlesItem);
+    }
+
+    public LiveData<List<ArticlesItem>> getSavedNews() {
+        return newsRepository.getSavedNews();
+    }
+
+    public void deleteArticle(ArticlesItem articlesItem) {
+        newsRepository.deleteArticle(articlesItem);
     }
 
 

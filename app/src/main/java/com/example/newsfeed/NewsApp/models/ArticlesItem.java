@@ -1,22 +1,26 @@
 package com.example.newsfeed.NewsApp.models;
 
-import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.room.Entity;
+import androidx.room.Index;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import org.parceler.Parcel;
+import org.jetbrains.annotations.NotNull;
+
 
 import java.io.Serializable;
 import java.util.Objects;
 
 
-@Entity(tableName = "articles")
+@Entity(tableName = "articles",indices = @Index(value = {"url"}, unique = true))
+//(onConflict = OnConflictStrategy.REPLACE)
 public class ArticlesItem implements Serializable  {
 	@PrimaryKey(autoGenerate = true)
 	private int id;
@@ -45,10 +49,17 @@ public class ArticlesItem implements Serializable  {
 	@Expose
 	private String urlToImage;
 
+/*
+private boolean present=false;
 
+	public boolean isPresent() {
+		return present;
+	}
 
-
-
+	public void setPresent(boolean present) {
+		this.present = present;
+	}
+*/
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -82,6 +93,7 @@ public class ArticlesItem implements Serializable  {
 		this.id = id;
 	}
 
+	@NotNull
 	@Override
 	public String toString() {
 		return "ArticlesItem{" +

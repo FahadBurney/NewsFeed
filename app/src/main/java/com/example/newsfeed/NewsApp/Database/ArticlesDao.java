@@ -12,15 +12,16 @@ import com.example.newsfeed.NewsApp.models.ArticlesItem;
 import java.util.List;
 
 @Dao
-public interface ArticlesDao
-{
-@Insert(onConflict= OnConflictStrategy.REPLACE)
-    Long upsert(ArticlesItem articles);
-
-@Query("Select * from articles")
+public interface ArticlesDao {
+    //add articles in our database
+    ArticlesItem articles = new ArticlesItem();
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void upsert(ArticlesItem  articles);
+    // get all articles in database so that we can show them in our bookmarks fragment
+    @Query("Select * from articles")
     LiveData<List<ArticlesItem>> getAllArticles();
-@Delete
+
+    // delete the articles
+    @Delete
     void deleteArticles(ArticlesItem articles);
-
-
 }
