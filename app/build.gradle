@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.newsfeed"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -64,6 +64,5 @@ dependencies {
 
 // library for RecyclerViewSwipeDecorator
     implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.3'
-// Joda-time
-    implementation 'net.danlew:android.joda:2.10.9.1'
+//library for card view
 }

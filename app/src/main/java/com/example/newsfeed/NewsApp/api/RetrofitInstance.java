@@ -1,35 +1,21 @@
 package com.example.newsfeed.NewsApp.api;
 
-import android.util.Log;
-import android.widget.Toast;
+import com.example.newsfeed.NewsApp.util.Constants;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import com.example.newsfeed.NewsApp.models.ArticlesItem;
-import com.example.newsfeed.NewsApp.models.NewsResponse;
-import com.example.newsfeed.NewsApp.util.Constants;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static okhttp3.logging.HttpLoggingInterceptor.*;
+import static okhttp3.logging.HttpLoggingInterceptor.Level;
 
 public class RetrofitInstance {
 
-    private List<ArticlesItem> articles = new ArrayList<>();
-    private static final String TAG = "RetroInst.onResponse";
-    public static final String TAG1 = "Articles";
 
     // only logging responses
     private static HttpLoggingInterceptor logging = new HttpLoggingInterceptor().setLevel(Level.BODY);
 // we use this interceptor to create network clients
-    private static OkHttpClient.Builder client= new OkHttpClient.Builder();
+    private static final OkHttpClient.Builder client= new OkHttpClient.Builder();
     {
         if (!client.interceptors().contains(logging)) {
             client.addInterceptor(logging);

@@ -25,7 +25,6 @@ public class NewsRepository {
 public void   upsert(ArticlesItem articlesItem)
     {
          new updateAndInsertAsyncTask(articlesDao).execute(articlesItem);
-      //  return articlesDao.upsert(articlesItem);
     }
  public    LiveData<List<ArticlesItem>> getSavedNews()
     {
