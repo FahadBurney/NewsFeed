@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.util.Log;
 import android.widget.ProgressBar;
 
+import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -130,7 +131,10 @@ public class NewsViewModel extends AndroidViewModel {
                 Log.e(TAG, "onFailure : " + t.getLocalizedMessage());
                 progressDialog.setCancelable(true);
             }
+
+
         });
+
     }
 
     // Functions for retrieving data from Database
