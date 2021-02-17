@@ -28,9 +28,9 @@ import java.util.List;
 public class SearchNewsFragment extends Fragment implements NewsAdapter.ArticleClickInterface {
     private NewsAdapter newsAdapter;
     //  private Timer timer;
-    private String savedSearchQuery;
+  //  private String savedSearchQuery;
     private NavController navController;
-private NewsViewModel newsViewModel;
+  //  private NewsViewModel newsViewModel;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
