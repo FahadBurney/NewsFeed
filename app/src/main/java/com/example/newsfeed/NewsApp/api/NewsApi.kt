@@ -1,21 +1,17 @@
-package com.example.newsfeed.NewsApp.api;
+package com.example.newsfeed.NewsApp.api
 
-import com.example.newsfeed.NewsApp.models.NewsResponse;
+import com.example.newsfeed.NewsApp.models.NewsResponse
+import retrofit2.Call
+import retrofit2.http.GET
+import retrofit2.http.Query
 
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Response;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
-
-public interface NewsApi {
+interface NewsApi {
     @GET("v2/top-headlines")
-    Call<NewsResponse> getBreakingNews(@Query(value="country") String country, @Query(value = "category") String category,
-                                           @Query("apiKey") String apiKey);
+    fun getBreakingNews(@Query(value = "country") country: String?, @Query(value = "category") category: String?,
+                        @Query("apiKey") apiKey: String?): Call<NewsResponse?>?
 
     @GET("v2/everything")
-    Call<NewsResponse> SearchNews(@Query("q") String searchQuery,
-                                  @Query("page") int pageNumber,
-                                  @Query("apiKey") String apiKey);
+    fun SearchNews(@Query("q") searchQuery: String?,
+                   @Query("page") pageNumber: Int,
+                   @Query("apiKey") apiKey: String?): Call<NewsResponse?>?
 }

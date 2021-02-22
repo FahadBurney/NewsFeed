@@ -1,156 +1,134 @@
-package com.example.newsfeed.NewsApp.UI;
+package com.example.newsfeed.NewsApp.UI
 
-import android.app.Application;
-import android.app.ProgressDialog;
-import android.util.Log;
-import android.widget.ProgressBar;
+import android.app.Application
+import android.app.ProgressDialog
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.example.newsfeed.NewsApp.Database.ArticlesDao
+import com.example.newsfeed.NewsApp.Database.ArticlesDatabase
+import com.example.newsfeed.NewsApp.Database.ArticlesDatabase.Companion.getInstance
+import com.example.newsfeed.NewsApp.Repository.NewsRepository
+import com.example.newsfeed.NewsApp.api.RetrofitInstance
+import com.example.newsfeed.NewsApp.models.ArticlesItem
+import com.example.newsfeed.NewsApp.models.NewsResponse
+import com.example.newsfeed.NewsApp.util.Constants
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-import androidx.core.widget.ContentLoadingProgressBar;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
-import com.example.newsfeed.NewsApp.Database.ArticlesDao;
-import com.example.newsfeed.NewsApp.Database.ArticlesDatabase;
-import com.example.newsfeed.NewsApp.NewsActivity;
-import com.example.newsfeed.NewsApp.Repository.NewsRepository;
-import com.example.newsfeed.NewsApp.api.NewsApi;
-import com.example.newsfeed.NewsApp.api.RetrofitInstance;
-import com.example.newsfeed.NewsApp.models.ArticlesItem;
-import com.example.newsfeed.NewsApp.models.NewsResponse;
-import com.example.newsfeed.NewsApp.util.Constants;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class NewsViewModel extends AndroidViewModel {
-    private NewsRepository newsRepository;
-    private ArticlesDatabase articlesDb;
-    private ArticlesDao articlesDao;
-
-    //public NewsViewModel()
-//{
-//}
-    public NewsViewModel(Application application) {
-        super(application);
-        newsRepository = new NewsRepository(application);
-        articlesDb = ArticlesDatabase.getInstance(application);
-        articlesDao = articlesDb.getArticlesDao();
-    }
-    private MutableLiveData<List<ArticlesItem>> newsArticlesLiveData;
-    private MutableLiveData<List<ArticlesItem>> searchNewsLiveData;
-
-    private static final String TAG = "NewsViewModel.Articles";
-    public static final String TAG1 = "Articles";
-    private String Message;
-    private String searchingText;
-
-    private void initNews(String message) {
-        NewsApi newsApi = RetrofitInstance.newsApi;
-        Call<NewsResponse> call = newsApi.getBreakingNews("in", message, Constants.API_KEY);
-        call.enqueue(new Callback<NewsResponse>() {
-            @Override
-            public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
-                if (response.isSuccessful() && response.body().getArticles() != null) {
-                    List<ArticlesItem> articlesItems = response.body().getArticles();
-                    newsArticlesLiveData.postValue(articlesItems);
+class NewsViewModel(application: Application?) : AndroidViewModel(application!!) {
+    private val newsRepository: NewsRepository
+    private val articlesDb: ArticlesDatabase?
+    private val articlesDao: ArticlesDao?
+    private var newsArticlesLiveData: MutableLiveData<List<ArticlesItem>?>? = null
+    private var searchNewsLiveData: MutableLiveData<List<ArticlesItem>?>? = null
+    private var Message: String? = null
+    private var searchingText: String? = null
+    private fun initNews(message: String) {
+        val newsApi = RetrofitInstance.newsApi
+        val call = newsApi.getBreakingNews("in", message, Constants.API_KEY)
+        call!!.enqueue(object : Callback<NewsResponse> {
+            override fun onResponse(call: Call<NewsResponse>, response: Response<NewsResponse>) {
+                if (response.isSuccessful && response.body()!!.articles != null) {
+                    val articlesItems = response.body()!!.articles
+                    newsArticlesLiveData!!.postValue(articlesItems)
                 } else {
-                    Log.i(TAG, "onResponse but articles not successful");
+                    Log.i(TAG, "onResponse but articles not successful")
                 }
             }
-            @Override
-            public void onFailure(Call<NewsResponse> call, Throwable t) {
-                Log.e(TAG, "onFailure : " + t.getLocalizedMessage());
+
+            override fun onFailure(call: Call<NewsResponse>, t: Throwable) {
+                Log.e(TAG, "onFailure : " + t.localizedMessage)
             }
-        });
+        })
     }
 
     // liveData method to return back this method to Details Of News Fragment
-    public LiveData<List<ArticlesItem>> getBreakingNews(String message) {
-
+    fun getBreakingNews(message: String): LiveData<List<ArticlesItem>?> {
         if (newsArticlesLiveData == null) {
-            newsArticlesLiveData = new MutableLiveData<>();
-            this.Message = message;
- //           Log.i("LiveData", "getBreakingNews " + message);
+            newsArticlesLiveData = MutableLiveData()
+            Message = message
+            //           Log.i("LiveData", "getBreakingNews " + message);
             // in the below function we pass the articles inside our liveData that we have
             // fetched from NewsApi
-            initNews(message);
-        } else if (!message.equals(Message)) {
-            newsArticlesLiveData = new MutableLiveData<>();
-            this.Message = message;
-            initNews(message);
+            initNews(message)
+        } else if (message != Message) {
+            newsArticlesLiveData = MutableLiveData()
+            Message = message
+            initNews(message)
         }
-        return newsArticlesLiveData;
+        return newsArticlesLiveData!!
     }
 
-    public LiveData<List<ArticlesItem>> SearchNews(String searchQuery, ProgressDialog progressDialog) {
+    fun SearchNews(searchQuery: String, progressDialog: ProgressDialog): LiveData<List<ArticlesItem>?> {
         if (searchNewsLiveData == null) {
-            searchNewsLiveData = new MutableLiveData<>();
-            searchingText = searchQuery;
-            searchNewsFromApi(searchQuery, progressDialog);
-        } else if (!searchQuery.equalsIgnoreCase(searchingText)) {
-            searchNewsLiveData = new MutableLiveData<>();
-            searchingText = searchQuery;
-            searchNewsFromApi(searchQuery, progressDialog);
+            searchNewsLiveData = MutableLiveData()
+            searchingText = searchQuery
+            searchNewsFromApi(searchQuery, progressDialog)
+        } else if (!searchQuery.equals(searchingText, ignoreCase = true)) {
+            searchNewsLiveData = MutableLiveData()
+            searchingText = searchQuery
+            searchNewsFromApi(searchQuery, progressDialog)
         } else {
-            progressDialog.dismiss();
+            progressDialog.dismiss()
         }
-        return searchNewsLiveData;
+        return searchNewsLiveData!!
     }
 
-    private void searchNewsFromApi(String searchQuery, ProgressDialog progressDialog) {
-        NewsApi newsApi = RetrofitInstance.newsApi;
-        int searchNewsPage = 1;
-        Call<NewsResponse> call = newsApi.SearchNews(searchQuery, searchNewsPage, Constants.API_KEY);
-     //   Log.i("ViewModel", searchQuery);
-        call.enqueue(new Callback<NewsResponse>() {
-            @Override
-            public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
-                int code = response.code();
-                String message = response.message();
-                Log.i("errorCode", code + " code" + " message " + message);
-
-                Log.e(TAG, "onResponse  : " + response.body().getTotalResults());
-                if (response.isSuccessful() && response.body().getArticles() != null) {
-                    List<ArticlesItem> articlesItems = response.body().getArticles();
-                    searchNewsLiveData.setValue(articlesItems);
-                    Log.e(TAG1, "articles from searchNews : " + searchNewsLiveData.getValue().toString());
+    private fun searchNewsFromApi(searchQuery: String, progressDialog: ProgressDialog) {
+        val newsApi = RetrofitInstance.newsApi
+        val searchNewsPage = 1
+        val call = newsApi.SearchNews(searchQuery, searchNewsPage, Constants.API_KEY)
+        //   Log.i("ViewModel", searchQuery);
+        call!!.enqueue(object : Callback<NewsResponse> {
+            override fun onResponse(call: Call<NewsResponse>, response: Response<NewsResponse>) {
+                val code = response.code()
+                val message = response.message()
+                Log.i("errorCode", "$code code message $message")
+                Log.e(TAG, "onResponse  : " + response.body()!!.totalResults)
+                if (response.isSuccessful && response.body()!!.articles != null) {
+                    val articlesItems = response.body()!!.articles
+                    searchNewsLiveData!!.setValue(articlesItems)
+                    Log.e(TAG1, "articles from searchNews : " + searchNewsLiveData!!.value.toString())
                 } else {
-                    Log.i(TAG, "onResponse in SearchNews but articles not successful");
+                    Log.i(TAG, "onResponse in SearchNews but articles not successful")
                 }
-                progressDialog.dismiss();
+                progressDialog.dismiss()
             }
 
-            @Override
-            public void onFailure(Call<NewsResponse> call, Throwable t) {
-                Log.e(TAG, "onFailure : " + t.getLocalizedMessage());
-                progressDialog.setCancelable(true);
+            override fun onFailure(call: Call<NewsResponse>, t: Throwable) {
+                Log.e(TAG, "onFailure : " + t.localizedMessage)
+                progressDialog.setCancelable(true)
             }
-
-
-        });
-
+        })
     }
 
     // Functions for retrieving data from Database
-    public void saveArticle(ArticlesItem articlesItem) {
-        Log.i("Inside ViewMODEL",articlesItem.toString());
-
-         newsRepository.upsert(articlesItem);
+    fun saveArticle(articlesItem: ArticlesItem) {
+        Log.i("Inside ViewMODEL", articlesItem.toString())
+        newsRepository.upsert(articlesItem)
     }
 
-    public LiveData<List<ArticlesItem>> getSavedNews() {
-        return newsRepository.getSavedNews();
+    val savedNews: LiveData<List<ArticlesItem?>?>?
+        get() = newsRepository.savedNews
+
+    fun deleteArticle(articlesItem: ArticlesItem?) {
+        newsRepository.deleteArticle(articlesItem)
     }
 
-    public void deleteArticle(ArticlesItem articlesItem) {
-        newsRepository.deleteArticle(articlesItem);
+    companion object {
+        private const val TAG = "NewsViewModel.Articles"
+        const val TAG1 = "Articles"
     }
 
-
+    //public NewsViewModel()
+    //{
+    //}
+    init {
+        newsRepository = NewsRepository(application)
+        articlesDb = getInstance(application!!)
+        articlesDao = articlesDb!!.articlesDao
+    }
 }

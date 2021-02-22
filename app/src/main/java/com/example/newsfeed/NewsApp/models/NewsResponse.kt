@@ -1,31 +1,18 @@
-package com.example.newsfeed.NewsApp.models;
+package com.example.newsfeed.NewsApp.models
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 
-import java.util.List;
+class NewsResponse {
+    @SerializedName("articles")
+    @Expose
+    val articles: List<ArticlesItem>? = null
 
-public class NewsResponse{
+    @SerializedName("totalResults")
+    @Expose
+    val totalResults = 0
 
-	@SerializedName("articles")
-	@Expose
-	private List<ArticlesItem> articles;
-	@SerializedName("totalResults")
-	@Expose
-	private int totalResults;
-	@SerializedName("status")
-	@Expose
-	private String status;
-
-	public int getTotalResults(){
-		return totalResults;
-	}
-
-	public List<ArticlesItem> getArticles(){
-		return articles;
-	}
-
-	public String getStatus(){
-		return status;
-	}
+    @SerializedName("status")
+    @Expose
+    val status: String? = null
 }

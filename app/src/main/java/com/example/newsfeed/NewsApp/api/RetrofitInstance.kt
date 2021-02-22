@@ -1,37 +1,35 @@
-package com.example.newsfeed.NewsApp.api;
+package com.example.newsfeed.NewsApp.api
 
-import com.example.newsfeed.NewsApp.util.Constants;
+import com.example.newsfeed.NewsApp.util.Constants
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+class RetrofitInstance {
+    companion object {
+        // only logging responses
+        private val logging = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
-import static okhttp3.logging.HttpLoggingInterceptor.Level;
+        // we use this interceptor to create network clients
+        private val client: Builder = Builder()
 
-public class RetrofitInstance {
+        // now we use our client and pass it to our retrofit instance
+        // addConverterFactory->how our response to be  interpreted and converted to Java Objects
+        //GsonConverterFactory->Google Implementation of  Json Converting
+        private val builder = Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client.build())
+        private val retrofit = builder.build()
 
+        // this is actual api object that we will use to make our actual network requests
+        @JvmField
+        var newsApi = retrofit.create(NewsApi::class.java)
+    }
 
-    // only logging responses
-    private static HttpLoggingInterceptor logging = new HttpLoggingInterceptor().setLevel(Level.BODY);
-// we use this interceptor to create network clients
-    private static final OkHttpClient.Builder client= new OkHttpClient.Builder();
-    {
+    init {
         if (!client.interceptors().contains(logging)) {
-            client.addInterceptor(logging);
+            client.addInterceptor(logging)
         }
     }
-    // now we use our client and pass it to our retrofit instance
-// addConverterFactory->how our response to be  interpreted and converted to Java Objects
-    //GsonConverterFactory->Google Implementation of  Json Converting
-     private static final Retrofit.Builder builder
-            = new Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client.build());
-
-    private static final Retrofit retrofit = builder.build();
-// this is actual api object that we will use to make our actual network requests
-  public static NewsApi newsApi = retrofit.create(NewsApi.class);
-
 }

@@ -1,26 +1,11 @@
-package com.example.newsfeed.NewsApp.models;
+package com.example.newsfeed.NewsApp.models
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 
-public class Source{
-	@SerializedName("id")
-	@Expose
-	private String id;
+class Source(@field:Expose @field:SerializedName("name") val name: String) {
+    @SerializedName("id")
+    @Expose
+    val id: String? = null
 
-	@SerializedName("name")
-	@Expose
-	private String name;
-
-	public Source(String name) {
-		this.name=name;
-	}
-
-	public String getName(){
-		return name;
-	}
-
-	public String getId(){
-		return id;
-	}
 }

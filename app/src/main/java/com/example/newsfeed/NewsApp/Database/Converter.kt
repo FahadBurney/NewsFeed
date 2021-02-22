@@ -1,20 +1,17 @@
-package com.example.newsfeed.NewsApp.Database;
+package com.example.newsfeed.NewsApp.Database
 
-import androidx.room.TypeConverter;
+import androidx.room.TypeConverter
+import com.example.newsfeed.NewsApp.models.Source
 
-import com.example.newsfeed.NewsApp.models.Source;
-
-public class Converter {
-
+class Converter {
     // passing source as a parameter and String is return-type
     @TypeConverter
-    public String fromSource(Source source)
-    {
-return source.getName();
+    fun fromSource(source: Source): String {
+        return source.name
     }
+
     @TypeConverter
-    public Source toSource(String name)
-    {
-        return new Source(name);
+    fun toSource(name: String?): Source {
+        return Source(name)
     }
 }
