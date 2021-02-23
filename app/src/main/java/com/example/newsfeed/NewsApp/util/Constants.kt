@@ -1,11 +1,10 @@
 package com.example.newsfeed.NewsApp.util
 
-object Constants {
-    val API_KEY: String? = null
-    val BASE_URL: String? = null
+class Constants {
 
-    init {
-        API_KEY = "73ba53cd38b04435ad2d16ea97d485ba"
-        BASE_URL = "https://newsapi.org/"
+    companion object
+    {
+        const val API_KEY="73ba53cd38b04435ad2d16ea97d485ba"
+        const val BASE_URL="https://newsapi.org/"
     }
 }

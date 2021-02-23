@@ -8,25 +8,20 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.example.newsfeed.NewsApp.NewsActivity
+import com.example.newsfeed.NewsApp.UI.NewsViewModel
 import com.example.newsfeed.NewsApp.fragments.TypeOfNewsFragmentDirections.ActionTypeOfNewsFragmentToDetailsOfNewsFragment
 import com.example.newsfeed.R
+import kotlinx.android.synthetic.main.fragment_type_of_news.*
 
-class TypeOfNewsFragment : Fragment(), View.OnClickListener {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_type_of_news, container, false)
-    }
+class TypeOfNewsFragment : Fragment(R.layout.fragment_type_of_news), View.OnClickListener {
+    lateinit var viewModel: NewsViewModel
 
     private var navController: NavController? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = (activity as NewsActivity).viewModel
         navController = Navigation.findNavController(view)
-        val scienceButton: CardView = activity!!.findViewById(R.id.scienceButton)
-        val healthButton: CardView = activity!!.findViewById(R.id.healthButton)
-        val entertainmentButton: CardView = activity!!.findViewById(R.id.entertainmentButton)
-        val sportsButton: CardView = activity!!.findViewById(R.id.sportsButton)
-        val technologyButton: CardView = activity!!.findViewById(R.id.technologyButton)
-        val businessButton: CardView = activity!!.findViewById(R.id.businessButton)
         scienceButton.setOnClickListener(this)
         healthButton.setOnClickListener(this)
         sportsButton.setOnClickListener(this)
@@ -37,36 +32,36 @@ class TypeOfNewsFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(v: View) {
         val action: ActionTypeOfNewsFragmentToDetailsOfNewsFragment
-        when (v.id) {
-            R.id.healthButton -> {
+        when (v) {
+            healthButton -> {
                 action = TypeOfNewsFragmentDirections.actionTypeOfNewsFragmentToDetailsOfNewsFragment()
                 action.message = "health"
-                navController!!.navigate(action)
+                navController?.navigate(action)
             }
-            R.id.sportsButton -> {
+            sportsButton -> {
                 action = TypeOfNewsFragmentDirections.actionTypeOfNewsFragmentToDetailsOfNewsFragment()
                 action.message = "sports"
-                navController!!.navigate(action)
+                navController?.navigate(action)
             }
-            R.id.entertainmentButton -> {
+            entertainmentButton -> {
                 action = TypeOfNewsFragmentDirections.actionTypeOfNewsFragmentToDetailsOfNewsFragment()
                 action.message = "entertainment"
-                navController!!.navigate(action)
+                navController?.navigate(action)
             }
-            R.id.technologyButton -> {
+            technologyButton -> {
                 action = TypeOfNewsFragmentDirections.actionTypeOfNewsFragmentToDetailsOfNewsFragment()
                 action.message = "technology"
-                navController!!.navigate(action)
+                navController?.navigate(action)
             }
-            R.id.businessButton -> {
+            businessButton -> {
                 action = TypeOfNewsFragmentDirections.actionTypeOfNewsFragmentToDetailsOfNewsFragment()
                 action.message = "business"
-                navController!!.navigate(action)
+                navController?.navigate(action)
             }
-            R.id.scienceButton -> {
+            scienceButton -> {
                 action = TypeOfNewsFragmentDirections.actionTypeOfNewsFragmentToDetailsOfNewsFragment()
                 action.message = "science"
-                navController!!.navigate(action)
+                navController?.navigate(action)
             }
         }
     }

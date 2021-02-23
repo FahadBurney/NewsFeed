@@ -12,23 +12,21 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.newsfeed.NewsApp.NewsActivity
 import com.example.newsfeed.NewsApp.UI.NewsViewModel
 import com.example.newsfeed.NewsApp.adapters.NewsAdapter
 import com.example.newsfeed.NewsApp.adapters.NewsAdapter.ArticleClickInterface
-import com.example.newsfeed.NewsApp.models.ArticlesItem
 import com.example.newsfeed.R
 import com.google.android.material.snackbar.Snackbar
 
-class BookMarksFragment : Fragment(), ArticleClickInterface {
-    private var newsViewModel: NewsViewModel? = null
+class BookMarksFragment : Fragment(R.layout.fragment_bookmarks) {
+
+    lateinit var viewModel: NewsViewModel
     private var newsAdapter: NewsAdapter? = null
     private var navController: NavController? = null
     private var recyclerView: RecyclerView? = null
     var simpleCallback: ItemTouchHelper.SimpleCallback? = null
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_bookmarks, container, false)
-    }
+
 
     private fun setupRecyclerView(view: View) {
         recyclerView = view.findViewById(R.id.RecyclerView)
@@ -40,7 +38,7 @@ class BookMarksFragment : Fragment(), ArticleClickInterface {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        newsViewModel = ViewModelProvider(requireActivity()).get(NewsViewModel::class.java)
+viewModel=(activity as NewsActivity).viewModel
         setupRecyclerView(view)
         // now we will call the liveData method that shows our articles that are saved in database
         // inside our recycler view

@@ -13,15 +13,16 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.newsfeed.NewsApp.NewsActivity
 import com.example.newsfeed.NewsApp.UI.NewsViewModel
 import com.example.newsfeed.NewsApp.adapters.NewsAdapter
 import com.example.newsfeed.NewsApp.adapters.NewsAdapter.ArticleClickInterface
-import com.example.newsfeed.NewsApp.models.ArticlesItem
 import com.example.newsfeed.R
 
-class SearchNewsFragment : Fragment(), ArticleClickInterface {
+class SearchNewsFragment : Fragment(R.layout.fragment_search) {
     private var newsAdapter: NewsAdapter? = null
 
+    lateinit var viewModel: NewsViewModel
     //  private Timer timer;
     //  private String savedSearchQuery;
     private var navController: NavController? = null
@@ -43,7 +44,7 @@ class SearchNewsFragment : Fragment(), ArticleClickInterface {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val articleViewModel = ViewModelProvider(requireActivity()).get(NewsViewModel::class.java)
+        viewModel=(activity as NewsActivity).viewModel
         navController = Navigation.findNavController(view)
         val searchQuery = activity!!.findViewById<EditText>(R.id.search_bar)
         // searchQuery.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);

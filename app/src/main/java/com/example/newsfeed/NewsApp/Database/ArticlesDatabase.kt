@@ -12,11 +12,13 @@ import com.example.newsfeed.NewsApp.models.ArticlesItem
 abstract class ArticlesDatabase : RoomDatabase() {
     // this method actually we use to access database operationmethods
     //that are put in articlesDao interface and we do it in repository class
-    abstract val articlesDao: ArticlesDao?
-
+abstract fun getArticlesDao():ArticlesDao
     companion object {
+//other threads can easily when you change the instance
         @Volatile
         private var instance: ArticlesDatabase? = null
+
+        /*
         @JvmStatic
         fun getInstance(context: Context): ArticlesDatabase? {
             if (instance == null) {
@@ -30,5 +32,15 @@ abstract class ArticlesDatabase : RoomDatabase() {
             }
             return instance
         }
+        */
+        private val LOCK=Any()
+        operator fun invoke(context: Context)= instance?: synchronized(LOCK){
+            instance?:createDatabase(context).also{ instance=it}
+        }
+
+        private fun createDatabase(context: Context)=Room.databaseBuilder(context.applicationContext,ArticlesDatabase::class.java,
+                                    "articles_database.db").fallbackToDestructiveMigration().build()
+
+        }
+
     }
-}
