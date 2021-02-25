@@ -4,7 +4,7 @@
     <string name="published_at">PUBLISHED AT</string>
     <string name="title">TITLE</string>
     <string name="source">SOURCE</string>
-    <string name="search" >Search</string>
+    <string name="Search" >Search</string>
     <string name="read_more">READ MORE</string>
     <string name="save">SAVE</string>
     <string name="news_categories">NEWS CATEGORIES</string>
@@ -16,4 +16,7 @@
     <string name="technology">TECHNOLOGY</string>
     <string name="health">HEALTH</string>
     <string name="image_not_found">IMAGE NOT FOUND</string>
+    <string name="search">Search</string>
+    <string name="bookmarks">BookMarks</string>
+    <string name="news">News</string>
 </resources>

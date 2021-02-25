@@ -16,13 +16,19 @@ import kotlinx.android.synthetic.main.fragment_details.*
 class DetailsOfNewsFragment : Fragment(R.layout.fragment_details) {
     lateinit var viewModel: NewsViewModel
     lateinit var newsAdapter: NewsAdapter
-
+    lateinit var message: String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as NewsActivity).viewModel
         setUpRecyclerView()
-        viewModel.categoryNews.observe(viewLifecycleOwner, Observer { response ->
+        arguments?.let {
+            val args = DetailsOfNewsFragmentArgs.fromBundle(it)
+            message=args.message
+            Log.d("message passed",message)
+        }
+        viewModel.categoryNews.also {
+            message}.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
                 is Resource.Success -> {
                     hideProgressBar()

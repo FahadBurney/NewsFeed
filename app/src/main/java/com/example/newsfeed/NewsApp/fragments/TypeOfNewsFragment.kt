@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.fragment_type_of_news.*
 class TypeOfNewsFragment : Fragment(R.layout.fragment_type_of_news), View.OnClickListener {
     lateinit var viewModel: NewsViewModel
 
-    private var navController: NavController? = null
+    lateinit var navController: NavController
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as NewsActivity).viewModel
@@ -36,32 +36,32 @@ class TypeOfNewsFragment : Fragment(R.layout.fragment_type_of_news), View.OnClic
             healthButton -> {
                 action = TypeOfNewsFragmentDirections.actionTypeOfNewsFragmentToDetailsOfNewsFragment()
                 action.message = "health"
-                navController?.navigate(action)
+                navController.navigate(action)
             }
             sportsButton -> {
                 action = TypeOfNewsFragmentDirections.actionTypeOfNewsFragmentToDetailsOfNewsFragment()
                 action.message = "sports"
-                navController?.navigate(action)
+                navController.navigate(action)
             }
             entertainmentButton -> {
                 action = TypeOfNewsFragmentDirections.actionTypeOfNewsFragmentToDetailsOfNewsFragment()
                 action.message = "entertainment"
-                navController?.navigate(action)
+                navController.navigate(action)
             }
             technologyButton -> {
                 action = TypeOfNewsFragmentDirections.actionTypeOfNewsFragmentToDetailsOfNewsFragment()
                 action.message = "technology"
-                navController?.navigate(action)
+                navController.navigate(action)
             }
             businessButton -> {
                 action = TypeOfNewsFragmentDirections.actionTypeOfNewsFragmentToDetailsOfNewsFragment()
                 action.message = "business"
-                navController?.navigate(action)
+                navController.navigate(action)
             }
             scienceButton -> {
                 action = TypeOfNewsFragmentDirections.actionTypeOfNewsFragmentToDetailsOfNewsFragment()
                 action.message = "science"
-                navController?.navigate(action)
+                navController.navigate(action)
             }
         }
     }

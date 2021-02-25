@@ -27,9 +27,11 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <!--
         <argument
             android:name="article"
             app:argType="com.example.newsfeed.NewsApp.models.ArticlesItem" />
+    -->
     </fragment>
     <fragment
         android:id="@+id/searchNewsFragment"
@@ -42,9 +44,11 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <!--
         <argument
             android:name="article"
             app:argType="com.example.newsfeed.NewsApp.models.ArticlesItem" />
+    -->
     </fragment>
     <fragment
         android:id="@+id/detailsOfNewsFragment"
@@ -57,17 +61,21 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+
         <argument
             android:name="message"
             app:argType="string"
             android:defaultValue="default" />
+
     </fragment>
     <fragment
         android:id="@+id/articleFragment"
         android:name="com.example.newsfeed.NewsApp.fragments.ArticleFragment"
         android:label="ArticleFragment" >
+        <!--
         <argument
             android:name="article"
             app:argType="com.example.newsfeed.NewsApp.models.ArticlesItem" />
+-->
     </fragment>
 </navigation>

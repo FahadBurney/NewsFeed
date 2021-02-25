@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 <item android:id="@+id/typeOfNewsFragment"
-    android:title="News"
+    android:title="@string/news"
     android:icon="@drawable/ic_news"
     />
     <item android:id="@+id/bookMarksFragment"
-        android:title="BookMarks"
+        android:title="@string/bookmarks"
         android:icon="@drawable/ic_bookmarks"
         />
     <item android:id="@+id/searchNewsFragment"
-        android:title="Search"
+        android:title="@string/search"
         android:icon="@drawable/ic_search"
         />
 </menu>

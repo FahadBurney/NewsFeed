@@ -26,7 +26,7 @@ class RetrofitInstance {
            builder.build()
         }
         // this is actual api object that we will use to make our actual network requests
-val api by lazy {
+val api: NewsApi by lazy {
 retrofit.create(NewsApi::class.java)
         }
 

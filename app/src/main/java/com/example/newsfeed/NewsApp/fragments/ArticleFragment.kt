@@ -16,29 +16,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ArticleFragment : Fragment() {
     lateinit var viewModel: NewsViewModel
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_article, container, false)
-    }
 
-    private var newsViewModel: NewsViewModel? = null
+    lateinit var newsViewModel: NewsViewModel
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val args = ArticleFragmentArgs.fromBundle(arguments!!)
-        viewModel=(activity as NewsActivity).viewModel
+        viewModel = (activity as NewsActivity).viewModel
 
-        //displaying them in webView
-        val webView = getView()!!.findViewById<WebView>(R.id.webView)
-        webView.webViewClient = WebViewClient()
-        webView.loadUrl(args.article.url)
-        val fab: FloatingActionButton = getView()!!.findViewById(R.id.BookMarksButton)
-        newsViewModel = ViewModelProvider(requireActivity()).get(NewsViewModel::class.java)
-        fab.setOnClickListener {
-            newsViewModel!!.saveArticle(args.article)
-            Toast.makeText(context, "BookMarked", Toast.LENGTH_SHORT).show()
-        }
-    }
 
-    companion object {
-        const val TAG = "About Articles"
     }
 }
