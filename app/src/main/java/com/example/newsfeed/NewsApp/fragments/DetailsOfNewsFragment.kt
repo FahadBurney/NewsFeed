@@ -11,6 +11,7 @@ import com.example.newsfeed.NewsApp.UI.NewsViewModel
 import com.example.newsfeed.NewsApp.adapters.NewsAdapter
 import com.example.newsfeed.NewsApp.util.Resource
 import com.example.newsfeed.R
+import kotlinx.android.synthetic.main.article_item_display.*
 import kotlinx.android.synthetic.main.fragment_details.*
 
 class DetailsOfNewsFragment : Fragment(R.layout.fragment_details)
@@ -28,6 +29,8 @@ class DetailsOfNewsFragment : Fragment(R.layout.fragment_details)
             message=args.message
             Log.d("message passed",message)
         }
+
+
         viewModel.sendingCategory(message)
         viewModel.categoryNews.observe(viewLifecycleOwner, Observer{
             response ->

@@ -1,8 +1,11 @@
 package com.example.newsfeed.NewsApp.fragments
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
@@ -11,13 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsfeed.NewsApp.NewsActivity
 import com.example.newsfeed.NewsApp.UI.NewsViewModel
 import com.example.newsfeed.NewsApp.adapters.NewsAdapter
+import com.example.newsfeed.NewsApp.util.Constants.Companion.DELAY_TIME
 import com.example.newsfeed.NewsApp.util.Resource
 import com.example.newsfeed.R
 import kotlinx.android.synthetic.main.fragment_search.*
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.android.synthetic.main.fragment_search.view.*
+import kotlinx.coroutines.*
 import androidx.core.widget.addTextChangedListener as addTextChangedListener1
 
 class SearchNewsFragment : Fragment(R.layout.fragment_search) {
@@ -30,22 +32,28 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search) {
         viewModel = (activity as NewsActivity).viewModel
         navController = Navigation.findNavController(view)
         setUpRecyclerView()
-/*
-     var job:Job?=null
-        search_bar.addTextChangedListener { editable->
-            job?.cancel()
-            job= MainScope().launch {
-                delay(500L)
-                editable?.let {
-                    if(editable.toString().isNotEmpty())
-                    {
-                        viewModel.getSearchNews(editable.toString())
-                    }
-                }
+//Implemented TextWatcher with Coroutine In it, that's it
+        var job:Job?=null
+search_bar.addTextChangedListener(object :TextWatcher{
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+    }
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+        job?.cancel()
+        job= MainScope().launch {
+            delay(DELAY_TIME)
+            if(search_bar.text.isNotEmpty())
+            {
+                viewModel.getSearchNews(search_bar.text.toString())
             }
         }
 
-*/
+    }
+
+    override fun afterTextChanged(s: Editable?) {
+    }
+})
+
         viewModel.searchNews.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
                 is Resource.Success -> {
@@ -82,4 +90,7 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search) {
             layoutManager = LinearLayoutManager(activity)
         }
     }
+
 }
+
+

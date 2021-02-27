@@ -77,5 +77,8 @@
             android:name="article"
             app:argType="com.example.newsfeed.NewsApp.models.ArticlesItem" />
 -->
+        <argument
+            android:name="articles"
+            app:argType="com.example.newsfeed.NewsApp.models.ArticlesItem" />
     </fragment>
 </navigation>
