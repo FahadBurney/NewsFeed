@@ -1,6 +1,5 @@
 package com.example.newsfeed.NewsApp.api
 
-import com.example.newsfeed.NewsApp.util.Constants
 import com.example.newsfeed.NewsApp.util.Constants.Companion.BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -23,14 +22,12 @@ class RetrofitInstance {
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(client.build())
             //creating a retrofit instance
-           builder.build()
+            builder.build()
         }
+
         // this is actual api object that we will use to make our actual network requests
-val api: NewsApi by lazy {
-retrofit.create(NewsApi::class.java)
+        val api: NewsApi by lazy {
+            retrofit.create(NewsApi::class.java)
         }
-
     }
-
-
 }

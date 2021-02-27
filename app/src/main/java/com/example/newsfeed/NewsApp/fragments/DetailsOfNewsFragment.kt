@@ -13,7 +13,8 @@ import com.example.newsfeed.NewsApp.util.Resource
 import com.example.newsfeed.R
 import kotlinx.android.synthetic.main.fragment_details.*
 
-class DetailsOfNewsFragment : Fragment(R.layout.fragment_details) {
+class DetailsOfNewsFragment : Fragment(R.layout.fragment_details)
+{
     lateinit var viewModel: NewsViewModel
     lateinit var newsAdapter: NewsAdapter
     lateinit var message: String
@@ -27,12 +28,15 @@ class DetailsOfNewsFragment : Fragment(R.layout.fragment_details) {
             message=args.message
             Log.d("message passed",message)
         }
-        viewModel.categoryNews.also {
-            message}.observe(viewLifecycleOwner, Observer { response ->
-            when (response) {
+        viewModel.sendingCategory(message)
+        viewModel.categoryNews.observe(viewLifecycleOwner, Observer{
+            response ->
+            when (response)
+            {
                 is Resource.Success -> {
                     hideProgressBar()
-                    response.data?.let { newsResponse ->
+                    response.data?.let {
+                        newsResponse ->
                         newsAdapter.asyncDiffer.submitList(newsResponse.articles)
                     }
                 }
@@ -47,6 +51,7 @@ class DetailsOfNewsFragment : Fragment(R.layout.fragment_details) {
                 }
             }
         })
+
     }
 
     private fun hideProgressBar() {
@@ -59,7 +64,7 @@ class DetailsOfNewsFragment : Fragment(R.layout.fragment_details) {
 
     private fun setUpRecyclerView() {
         newsAdapter = NewsAdapter()
-        RecyclerView.apply {
+        detailsRecyclerView.apply {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(activity)
         }

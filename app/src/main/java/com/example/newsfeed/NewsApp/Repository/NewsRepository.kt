@@ -6,5 +6,9 @@ import com.example.newsfeed.NewsApp.api.RetrofitInstance
 class NewsRepository(val database: ArticlesDatabase) {
 
     suspend fun getCategoryNews(countryCode:String,category:String,pageNumber:Int)=
-            RetrofitInstance.api.getCategoryNews(countryCode,category)
+            RetrofitInstance.api.getCategoryNews(countryCode,category,pageNumber)
+
+    suspend fun searchNews(searchQuery:String,pageNumber: Int)=
+            RetrofitInstance.api.searchNews(searchQuery,pageNumber)
+
 }
