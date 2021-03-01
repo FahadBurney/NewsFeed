@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.example.newsfeed.NewsApp.models.ArticlesItem
 import com.example.newsfeed.R
 import kotlinx.android.synthetic.main.article_item_display.view.*
+import java.text.SimpleDateFormat
 
 
 class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
@@ -41,10 +42,21 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
             Glide.with(this).load(articlesItem?.urlToImage).centerCrop().into(ivArticleImage)
             tvTitle.text = articlesItem?.title
             tvDescription.text = articlesItem?.description
-            tvPublishedAt.text = articlesItem?.publishedAt
+            try {
+                val s1: String? = articlesItem?.publishedAt
+                val d = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(s1)
+                var publishedAt: String? = ""
+                if (d != null) {
+                    publishedAt = SimpleDateFormat("MMMM dd, yyyy ").format(d)
+                }
+                tvPublishedAt.text = publishedAt
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+           // tvPublishedAt.text = articlesItem?.publishedAt
             readMore.setOnClickListener {
                 onItemClickListener?.let {
-                   it( articlesItem)
+                   it(articlesItem)
                 }
             }
         }
@@ -58,6 +70,6 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
 private var onItemClickListener: ((ArticlesItem) -> Unit)? = null
 
 fun setOnItemClickListener(listener: (ArticlesItem) -> Unit) {
-    Log.d("THEListener","articlesUrl is $listener")
+    Log.d("THEListener", "articlesUrl is $listener")
     onItemClickListener = listener
 }
