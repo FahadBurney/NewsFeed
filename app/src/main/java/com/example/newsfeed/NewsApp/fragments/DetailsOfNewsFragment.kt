@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AbsListView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -52,6 +53,7 @@ class DetailsOfNewsFragment : Fragment(R.layout.fragment_details) {
                     hideProgressBar()
                     response.message?.let { message ->
                         Log.e("Tag", "Error Occured while getting Response $message ")
+                    Toast.makeText(activity,"Error: $message",Toast.LENGTH_LONG).show()
                     }
                 }
                 is Resource.Loading -> {

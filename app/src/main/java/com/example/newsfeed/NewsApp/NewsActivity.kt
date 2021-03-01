@@ -25,7 +25,7 @@ class NewsActivity : AppCompatActivity() {
 
         //here we actually make declarations of newsViewModel and NewsRepository and NewsViewModelProviderFactory
         val newsRepository=NewsRepository(ArticlesDatabase.invoke(this))
-        val newsViewModelProviderFactory=NewsViewModelProviderFactory(newsRepository)
+        val newsViewModelProviderFactory=NewsViewModelProviderFactory(application,newsRepository)
         viewModel=ViewModelProvider(this, newsViewModelProviderFactory).get(NewsViewModel::class.java)
 
         // Here We actually set up bottom Navigation View For switching from one fragment to another
