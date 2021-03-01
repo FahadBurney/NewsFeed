@@ -1,5 +1,6 @@
 package com.example.newsfeed.NewsApp.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,13 +38,13 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
         val articlesItem = asyncDiffer.currentList[position]
         holder.itemView.apply {
-            Glide.with(this).load(articlesItem.urlToImage).centerCrop().into(ivArticleImage)
-            tvTitle.text = articlesItem.title
-            tvDescription.text = articlesItem.description
-            tvPublishedAt.text = articlesItem.publishedAt
+            Glide.with(this).load(articlesItem?.urlToImage).centerCrop().into(ivArticleImage)
+            tvTitle.text = articlesItem?.title
+            tvDescription.text = articlesItem?.description
+            tvPublishedAt.text = articlesItem?.publishedAt
             readMore.setOnClickListener {
                 onItemClickListener?.let {
-                    articlesItem
+                   it( articlesItem)
                 }
             }
         }
@@ -57,5 +58,6 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
 private var onItemClickListener: ((ArticlesItem) -> Unit)? = null
 
 fun setOnItemClickListener(listener: (ArticlesItem) -> Unit) {
+    Log.d("THEListener","articlesUrl is $listener")
     onItemClickListener = listener
 }

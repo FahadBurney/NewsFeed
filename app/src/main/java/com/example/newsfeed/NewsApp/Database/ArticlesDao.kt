@@ -11,7 +11,7 @@ interface ArticlesDao {
 
     // get all articles in database so that we can show them in our bookmarks fragment
     @Query("Select * from articles")
-    fun allArticles(): LiveData<List<ArticlesItem>>
+    fun getAllArticles(): LiveData<List<ArticlesItem>>
     // delete the articles
     @Delete
 suspend  fun deleteArticles(articles: ArticlesItem)

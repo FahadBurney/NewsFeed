@@ -1,16 +1,14 @@
 package com.example.newsfeed.NewsApp.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.cardview.widget.CardView
+import androidx.core.view.GravityCompat.apply
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.example.newsfeed.NewsApp.NewsActivity
 import com.example.newsfeed.NewsApp.UI.NewsViewModel
-import com.example.newsfeed.NewsApp.fragments.TypeOfNewsFragmentDirections.ActionTypeOfNewsFragmentToDetailsOfNewsFragment
 import com.example.newsfeed.R
 import kotlinx.android.synthetic.main.fragment_type_of_news.*
 
@@ -31,38 +29,35 @@ class TypeOfNewsFragment : Fragment(R.layout.fragment_type_of_news), View.OnClic
     }
 
     override fun onClick(v: View) {
-        val action: ActionTypeOfNewsFragmentToDetailsOfNewsFragment
-        when (v) {
-            healthButton -> {
-                action = TypeOfNewsFragmentDirections.actionTypeOfNewsFragmentToDetailsOfNewsFragment()
-                action.message = "health"
-                navController.navigate(action)
-            }
-            sportsButton -> {
-                action = TypeOfNewsFragmentDirections.actionTypeOfNewsFragmentToDetailsOfNewsFragment()
-                action.message = "sports"
-                navController.navigate(action)
-            }
-            entertainmentButton -> {
-                action = TypeOfNewsFragmentDirections.actionTypeOfNewsFragmentToDetailsOfNewsFragment()
-                action.message = "entertainment"
-                navController.navigate(action)
-            }
-            technologyButton -> {
-                action = TypeOfNewsFragmentDirections.actionTypeOfNewsFragmentToDetailsOfNewsFragment()
-                action.message = "technology"
-                navController.navigate(action)
-            }
-            businessButton -> {
-                action = TypeOfNewsFragmentDirections.actionTypeOfNewsFragmentToDetailsOfNewsFragment()
-                action.message = "business"
-                navController.navigate(action)
-            }
-            scienceButton -> {
-                action = TypeOfNewsFragmentDirections.actionTypeOfNewsFragmentToDetailsOfNewsFragment()
-                action.message = "science"
-                navController.navigate(action)
+        val bundle=Bundle().apply{
+            when(v)
+            {
+                healthButton->{
+                    putString("message","health")
+                    findNavController().navigate(R.id.action_typeOfNewsFragment_to_detailsOfNewsFragment,this)
+                }
+                sportsButton->{
+                    putString("message","sports")
+                    findNavController().navigate(R.id.action_typeOfNewsFragment_to_detailsOfNewsFragment,this)
+                }
+                technologyButton->{
+                    putString("message","technology")
+                    findNavController().navigate(R.id.action_typeOfNewsFragment_to_detailsOfNewsFragment,this)
+                }
+                businessButton->{
+                    putString("message","business")
+                    findNavController().navigate(R.id.action_typeOfNewsFragment_to_detailsOfNewsFragment,this)
+                }
+                entertainmentButton->{
+                    putString("message","entertainment")
+                    findNavController().navigate(R.id.action_typeOfNewsFragment_to_detailsOfNewsFragment,this)
+                }
+                scienceButton->{
+                    putString("message","science")
+                    findNavController().navigate(R.id.action_typeOfNewsFragment_to_detailsOfNewsFragment,this)
+                }
             }
         }
+
     }
 }

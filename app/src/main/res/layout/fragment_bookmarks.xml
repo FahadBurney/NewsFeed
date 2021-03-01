@@ -8,7 +8,7 @@
     android:padding="10dp">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/RecyclerView"
+        android:id="@+id/bookMarksRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

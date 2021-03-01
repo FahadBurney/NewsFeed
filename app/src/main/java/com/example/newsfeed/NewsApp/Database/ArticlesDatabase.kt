@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.newsfeed.NewsApp.models.ArticlesItem
 
-@Database(entities = [ArticlesItem::class], version = 1,exportSchema = false)
+@Database(entities = [ArticlesItem::class], version = 2,exportSchema = false)
 @TypeConverters(Converter::class)
 abstract class ArticlesDatabase : RoomDatabase() {
     // this method actually we use to access database operationmethods
