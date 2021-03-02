@@ -22,34 +22,7 @@ import java.io.IOException
 
 class NewsViewModel(app: Application, val newsRepository: NewsRepository) : AndroidViewModel(app) {
 
-    val categoryNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
-    var categoryNewPageNumber = 1
-    var categoryNewsResponse: NewsResponse? = null
-
-
-    val searchNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
-    var searchNewsPageNumber = 1
-    var message: String? = null
-    var searchNewsResponse: NewsResponse? = null
-
-    var newCategory:String?=null
-    var oldCategory:String?=null
-    var newSearchQuery:String? = null
-    var oldSearchQuery:String? = null
-
-    fun getCategoryNews(countryCode: String, category: String) = viewModelScope.launch {
-      //  categoryNews.postValue(Resource.Loading())
-safeCategoryNewsCall(countryCode, category)
-    }
-
-    fun getSearchNews(searchQuery: String) = viewModelScope.launch {
-      //  Log.d("SearchText","query in getSearchNews() $searchQuery")
-
-safeSearchNewsCall(searchQuery)
-    }
-
-    // database functionality
-
+    // database functionality functions
     fun savedArticle(articlesItem: ArticlesItem) = viewModelScope.launch {
         newsRepository.upsert(articlesItem)
     }
@@ -60,7 +33,43 @@ safeSearchNewsCall(searchQuery)
         newsRepository.deleteArticles(articlesItem)
     }
 
+// Variable declarations of category news Respectively
 
+    val categoryNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
+    var categoryNewPageNumber = 1
+    var categoryNewsResponse: NewsResponse? = null
+    var newCategory:String?=null
+    var oldCategory:String?=null
+    var message: String? = null
+
+
+    fun sendingCategory(msg: String) {
+        message = msg
+        message?.let { getCategoryNews("in", category = it) }
+    }
+    fun getCategoryNews(countryCode: String, category: String) = viewModelScope.launch {
+        safeCategoryNewsCall(countryCode, category)
+    }
+
+    private suspend fun safeCategoryNewsCall(countryCode: String,category: String){
+        newCategory=category
+        categoryNews.postValue(Resource.Loading())
+        try {
+            if(hasInternetConnection()) {
+                val response = newsRepository.getCategoryNews(countryCode, category, categoryNewPageNumber)
+                categoryNews.postValue(getCategoryNewsResponse(response))
+            }
+            else{
+                categoryNews.postValue(Resource.Error("No Internet Connection"))
+            }
+        }
+        catch (t:Throwable){
+            when(t){
+                is IOException->categoryNews.postValue(Resource.Error("Network Failure"))
+                else ->categoryNews.postValue(Resource.Error("Conversion Error"))
+            }
+        }
+    }
     private fun getCategoryNewsResponse(response: Response<NewsResponse>): Resource<NewsResponse> {
         if (response.isSuccessful) {
             response.body()?.let { resultResponse ->
@@ -80,51 +89,17 @@ safeSearchNewsCall(searchQuery)
         }
         return Resource.Error(response.message())
     }
+// Variable declarations of Search news Respectively
+    val searchNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
+    var searchNewsPageNumber = 1
+    var searchNewsResponse: NewsResponse? = null
 
-    private fun getSearchNewsResponse(response: Response<NewsResponse>): Resource<NewsResponse> {
-        if (response.isSuccessful) {
-            response.body()?.let {resultResponse->
-                searchNewsPageNumber++
-                if(searchNewsResponse == null || newSearchQuery != oldSearchQuery) {
-                    searchNewsPageNumber = 1
-                    oldSearchQuery = newSearchQuery
-                    searchNewsResponse = resultResponse
-                } else {
-                    searchNewsPageNumber++
-                    val oldArticles = searchNewsResponse?.articles
-                    val newArticles = resultResponse.articles
-                    oldArticles?.addAll(newArticles)
-                }
+    var newSearchQuery:String? = null
+    var oldSearchQuery:String? = null
 
-                return Resource.Success (searchNewsResponse?:resultResponse)
-            }
-        }
-        return Resource.Error(response.message())
-    }
 
-    fun sendingCategory(msg: String) {
-        message = msg
-        message?.let { getCategoryNews("in", category = it) }
-    }
-
-    private suspend fun safeCategoryNewsCall(countryCode: String,category: String){
-        newCategory=category
-        categoryNews.postValue(Resource.Loading())
-        try {
-            if(hasInternetConnection()) {
-                val response = newsRepository.getCategoryNews(countryCode, category, categoryNewPageNumber)
-                categoryNews.postValue(getCategoryNewsResponse(response))
-            }
-            else{
-categoryNews.postValue(Resource.Error("No Internet Connection"))
-            }
-            }
-        catch (t:Throwable){
-when(t){
-    is IOException->categoryNews.postValue(Resource.Error("Network Failure"))
-    else ->categoryNews.postValue(Resource.Error("Conversion Error"))
-}
-        }
+    fun getSearchNews(searchQuery: String) = viewModelScope.launch {
+safeSearchNewsCall(searchQuery)
     }
     private suspend fun safeSearchNewsCall(searchQuery: String){
         newSearchQuery=searchQuery
@@ -149,7 +124,28 @@ when(t){
         }
     }
 
+    private fun getSearchNewsResponse(response: Response<NewsResponse>): Resource<NewsResponse> {
+        if (response.isSuccessful) {
+            response.body()?.let {resultResponse->
+                searchNewsPageNumber++
+                if(searchNewsResponse == null || newSearchQuery != oldSearchQuery) {
+                    searchNewsPageNumber = 1
+                    oldSearchQuery = newSearchQuery
+                    searchNewsResponse = resultResponse
+                } else {
+                    searchNewsPageNumber++
+                    val oldArticles = searchNewsResponse?.articles
+                    val newArticles = resultResponse.articles
+                    oldArticles?.addAll(newArticles)
+                }
 
+                return Resource.Success (searchNewsResponse?:resultResponse)
+            }
+        }
+        return Resource.Error(response.message())
+    }
+
+    // Internet Connection Checking function Respectively
     private fun hasInternetConnection(): Boolean {
         val connectivityManager = getApplication<NewsApplication>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
