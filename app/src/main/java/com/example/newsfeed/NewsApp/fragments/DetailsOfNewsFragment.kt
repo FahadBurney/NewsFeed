@@ -53,7 +53,7 @@ class DetailsOfNewsFragment : Fragment(R.layout.fragment_details) {
                     hideProgressBar()
                     response.message?.let { message ->
                         Log.e("Tag", "Error Occured while getting Response $message ")
-                    Toast.makeText(activity,"Error: $message",Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity,"Error  $message",Toast.LENGTH_LONG).show()
                     }
                 }
                 is Resource.Loading -> {

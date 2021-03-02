@@ -6,6 +6,7 @@ import android.net.ConnectivityManager
 import android.net.ConnectivityManager.*
 import android.net.NetworkCapabilities.*
 import android.os.Build
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -25,10 +26,16 @@ class NewsViewModel(app: Application, val newsRepository: NewsRepository) : Andr
     var categoryNewPageNumber = 1
     var categoryNewsResponse: NewsResponse? = null
 
+
     val searchNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
     var searchNewsPageNumber = 1
     var message: String? = null
     var searchNewsResponse: NewsResponse? = null
+
+    var newCategory:String?=null
+    var oldCategory:String?=null
+    var newSearchQuery:String? = null
+    var oldSearchQuery:String? = null
 
     fun getCategoryNews(countryCode: String, category: String) = viewModelScope.launch {
       //  categoryNews.postValue(Resource.Loading())
@@ -36,7 +43,8 @@ safeCategoryNewsCall(countryCode, category)
     }
 
     fun getSearchNews(searchQuery: String) = viewModelScope.launch {
-        //  val categoryNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
+      //  Log.d("SearchText","query in getSearchNews() $searchQuery")
+
 safeSearchNewsCall(searchQuery)
     }
 
@@ -57,9 +65,12 @@ safeSearchNewsCall(searchQuery)
         if (response.isSuccessful) {
             response.body()?.let { resultResponse ->
                 categoryNewPageNumber++
-                if (categoryNewsResponse == null) {
+                if (categoryNewsResponse == null|| oldCategory!=newCategory) {
+                    categoryNewPageNumber=1
+                    oldCategory=newCategory
                     categoryNewsResponse = resultResponse
                 } else {
+                    categoryNewPageNumber++
                     val oldArticlesItem = categoryNewsResponse?.articles
                     val newArticlesItem = resultResponse.articles
                     oldArticlesItem?.addAll(newArticlesItem)
@@ -72,16 +83,20 @@ safeSearchNewsCall(searchQuery)
 
     private fun getSearchNewsResponse(response: Response<NewsResponse>): Resource<NewsResponse> {
         if (response.isSuccessful) {
-            response.body()?.let { resultResponse ->
+            response.body()?.let {resultResponse->
                 searchNewsPageNumber++
-                if (searchNewsResponse == null) {
+                if(searchNewsResponse == null || newSearchQuery != oldSearchQuery) {
+                    searchNewsPageNumber = 1
+                    oldSearchQuery = newSearchQuery
                     searchNewsResponse = resultResponse
                 } else {
-                    val oldArticlesItem = searchNewsResponse?.articles
-                    val newArticlesItem = resultResponse.articles
-                    oldArticlesItem?.addAll(newArticlesItem)
+                    searchNewsPageNumber++
+                    val oldArticles = searchNewsResponse?.articles
+                    val newArticles = resultResponse.articles
+                    oldArticles?.addAll(newArticles)
                 }
-                return Resource.Success(searchNewsResponse ?: resultResponse)
+
+                return Resource.Success (searchNewsResponse?:resultResponse)
             }
         }
         return Resource.Error(response.message())
@@ -93,6 +108,7 @@ safeSearchNewsCall(searchQuery)
     }
 
     private suspend fun safeCategoryNewsCall(countryCode: String,category: String){
+        newCategory=category
         categoryNews.postValue(Resource.Loading())
         try {
             if(hasInternetConnection()) {
@@ -111,13 +127,17 @@ when(t){
         }
     }
     private suspend fun safeSearchNewsCall(searchQuery: String){
+        newSearchQuery=searchQuery
         searchNews.postValue(Resource.Loading())
         try {
             if(hasInternetConnection()) {
+                Log.d("SearchText","safeSearchNewsCall inside try inside if $searchQuery")
                 val response = newsRepository.searchNews(searchQuery,searchNewsPageNumber)
                 searchNews.postValue(getSearchNewsResponse(response))
             }
             else{
+                Log.d("SearchText","safeSearchNewsCall inside try inside else $searchQuery")
+
                 searchNews.postValue(Resource.Error("No Internet Connection"))
             }
         }
@@ -149,7 +169,6 @@ when(t){
                     TYPE_MOBILE -> true
                     TYPE_ETHERNET -> true
                     else -> false
-
                 }
             }
         }

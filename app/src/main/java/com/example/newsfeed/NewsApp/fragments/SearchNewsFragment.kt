@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.AbsListView
-import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
@@ -26,7 +25,6 @@ import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.fragment_search.paginationProgressBar
 import kotlinx.android.synthetic.main.fragment_search.view.*
 import kotlinx.coroutines.*
-import androidx.core.widget.addTextChangedListener as addTextChangedListener1
 
 class SearchNewsFragment : Fragment(R.layout.fragment_search) {
     lateinit var viewModel: NewsViewModel
@@ -60,6 +58,7 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search) {
                     if (search_bar.text.isNotEmpty()) {
                         searchRecyclerView.visibility=View.VISIBLE
                         viewModel.getSearchNews(search_bar.text.toString())
+                        Log.d("SearchText","search bar text is ${search_bar.text}")
                     }
                     else if(search_bar.text.isEmpty()){
 searchRecyclerView.visibility=View.INVISIBLE
@@ -90,6 +89,7 @@ searchRecyclerView.visibility=View.INVISIBLE
                     hideProgressBar()
                     response.message?.let { message ->
                         Log.e("Tag", "Error Occured while getting Response $message")
+
                     }
                 }
                 is Resource.Loading -> {

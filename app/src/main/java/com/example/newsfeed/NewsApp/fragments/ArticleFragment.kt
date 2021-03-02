@@ -10,7 +10,6 @@ import androidx.navigation.fragment.navArgs
 import com.example.newsfeed.NewsApp.NewsActivity
 import com.example.newsfeed.NewsApp.UI.NewsViewModel
 import com.example.newsfeed.R
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_article.*
 
 class ArticleFragment : Fragment(R.layout.fragment_article) {
