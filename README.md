@@ -16,3 +16,5 @@ and You can search the news By searching on search bar.<br>
  - MVVM (Model- View View Model) Architecture<br><BR>
  - Room DataBase<br><br>
  - Coroutines (For Background Tasks)
+
+## Screenshots
