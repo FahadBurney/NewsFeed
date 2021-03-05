@@ -25,7 +25,3 @@ and You can search the news By searching on search bar.<br>
 ![Screenshot (16)](https://user-images.githubusercontent.com/64160698/109850945-162f0780-7c79-11eb-91cb-2a99d3e1f118.png)
 ![Screenshot (17)](https://user-images.githubusercontent.com/64160698/109850954-17f8cb00-7c79-11eb-9bc9-09dc2f1cc85c.png)
 
-
-## Video
-
-https://user-images.githubusercontent.com/64160698/109856195-395cb580-7c7f-11eb-9036-75d4064a5d6f.mp4
