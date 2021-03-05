@@ -13,8 +13,6 @@
         tools:layout_editor_absoluteX="212dp"
         tools:layout_editor_absoluteY="134dp" >
 
-
-
     </WebView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

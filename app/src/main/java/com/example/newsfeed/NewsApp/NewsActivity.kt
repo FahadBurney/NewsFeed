@@ -17,6 +17,7 @@ class NewsActivity : AppCompatActivity() {
     lateinit var viewModel: NewsViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.Theme_NewsFeed)
         setContentView(R.layout.activity_news)
 
         //here we actually make declarations of newsViewModel and NewsRepository and NewsViewModelProviderFactory
@@ -26,13 +27,6 @@ class NewsActivity : AppCompatActivity() {
 
         // Here We actually set up bottom Navigation View For switching from one fragment to another
         bottomNavigationView.setupWithNavController(newsNavHostFragment.findNavController())
-
-        //    NewsRepository newsRepository = new NewsRepository(ArticlesDatabase.getInstance(this));
-        //      NewsViewModelProviderFactory ViewModelProvideFactory=new NewsViewModelProviderFactory(newsRepository);
-//ViewModel= new ViewModelProvider(this,ViewModelProvideFactory).get(NewsViewModel.class);
-      //  val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-       // val navController = Navigation.findNavController(this, R.id.newsNavHostFragment)
-       // NavigationUI.setupWithNavController(bottomNavigationView, navController)
 
 
     }
